@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>Vinyle</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Barre de titre custom (fenêtre sans cadre) -->
+  <header class="titlebar" id="titlebar">
+    <div class="titlebar-brand">
+      <img src="assets/vinyl.png" class="brand-icon" alt="Vinyle" />
+      <span>Vinyle</span>
+    </div>
+    <div class="titlebar-controls">
+      <button id="btn-min" class="tb-btn" title="Réduire">–</button>
+      <button id="btn-close" class="tb-btn tb-close" title="Fermer">×</button>
+    </div>
+  </header>
+
+  <main class="stage">
+
+    <!-- Platine -->
+    <section class="turntable-wrap">
+      <div class="plinth">
+        <div class="plinth-grain"></div>
+
+        <div class="platter">
+          <div class="vinyl" id="vinyl">
+            <div class="vinyl-grooves"></div>
+            <div class="label" id="vinyl-label">
+              <img id="artwork-img" alt="" />
+              <div class="label-fallback" id="label-fallback">♪</div>
+            </div>
+            <div class="spindle-hole"></div>
+          </div>
+        </div>
+
+        <!-- Bras de lecture interactif -->
+        <div class="tonearm-base">
+          <div class="tonearm" id="tonearm">
+            <div class="tonearm-tube"></div>
+            <div class="tonearm-head">
+              <div class="stylus-tip"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="plinth-label">MD&nbsp;·&nbsp;WIN</div>
+      </div>
+
+      <p class="hint" id="drop-hint">Fais glisser le bras vers le disque pour lancer la lecture</p>
+    </section>
+
+    <!-- Panneau latéral -->
+    <section class="panel">
+
+      <div class="connection-pill" id="connection-pill">
+        <span class="dot" id="connection-dot"></span>
+        <span id="connection-text">Recherche d'Apple Music…</span>
+      </div>
+
+      <div class="now-playing">
+        <h1 id="track-title">Aucun morceau</h1>
+        <p id="track-artist">Lance la lecture dans Apple Music</p>
+        <p id="track-album"></p>
+      </div>
+
+      <div class="transport">
+        <button id="btn-prev" class="ctrl-btn" title="Précédent">⏮</button>
+        <button id="btn-playpause" class="ctrl-btn ctrl-btn-lg" title="Lecture / Pause">▶</button>
+        <button id="btn-next" class="ctrl-btn" title="Suivant">⏭</button>
+      </div>
+
+      <div class="progress">
+        <span id="time-current">0:00</span>
+        <input type="range" id="seek" min="0" max="100" value="0" />
+        <span id="time-total">0:00</span>
+      </div>
+
+      <div class="volume">
+        <span class="volume-icon">🔈</span>
+        <input type="range" id="volume" min="0" max="100" value="80" />
+      </div>
+
+      <hr class="divider" />
+
+      <div class="theme-drawer">
+        <button class="drawer-toggle" id="drawer-toggle">🎨 Thème du vinyle <span id="drawer-arrow">▾</span></button>
+
+        <div class="drawer-body" id="drawer-body">
+          <label class="field">
+            <span>Thème de l'interface</span>
+            <select id="app-theme-select">
+              <option value="auto">Auto (Système Windows)</option>
+              <option value="dark" selected>Sombre</option>
+              <option value="light">Clair</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Finition de la table</span>
+            <select id="table-wood-select">
+              <option value="noyer" selected>Bois — Noyer massif</option>
+              <option value="chene">Bois — Chêne clair</option>
+              <option value="acajou">Bois — Acajou rouge</option>
+              <option value="ebene">Bois — Ébène foncé</option>
+              <option value="erable">Bois — Érable crème</option>
+              <option value="custom">Couleur personnalisée</option>
+            </select>
+          </label>
+
+          <label class="field" id="table-custom-field" hidden>
+            <span>Couleur personnalisée de la table</span>
+            <input type="color" id="table-custom-color" value="#4a2c1a" />
+          </label>
+
+          <label class="field">
+            <span>Couleur du disque vinyle</span>
+            <select id="vinyl-color-select">
+              <option value="black" selected>Noir classique</option>
+              <option value="white">Blanc pur</option>
+              <option value="auto">Auto (Couleur de la pochette)</option>
+              <option value="custom">Couleur personnalisée</option>
+            </select>
+          </label>
+
+          <label class="field" id="vinyl-custom-field" hidden>
+            <span>Couleur personnalisée du vinyle</span>
+            <input type="color" id="vinyl-custom-color" value="#0b0b0d" />
+          </label>
+
+          <div class="preset-row" id="preset-row" hidden><!-- conservé pour compatibilité --></div>
+
+          <label class="field">
+            <span>Style du macaron central</span>
+            <select id="texture-select">
+              <option value="artwork" selected>Pochette d'album au centre (macaron)</option>
+              <option value="uni">Macaron couleur unie</option>
+              <option value="full-picture">Picture disc (pochette entière)</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Couleur d'accentuation</span>
+            <input type="color" id="accent-color" value="#c97a3d" />
+          </label>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

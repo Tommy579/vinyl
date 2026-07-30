@@ -1,0 +1,52 @@
+{
+  "presets": [
+    {
+      "id": "noyer",
+      "name": "Noyer",
+      "vinylColor": "#0b0b0d",
+      "accent": "#c97a3d",
+      "label": "#ead9b8",
+      "texture": "uni"
+    },
+    {
+      "id": "midnight",
+      "name": "Midnight",
+      "vinylColor": "#0b0b0d",
+      "accent": "#5b8cff",
+      "label": "#dfe6f5",
+      "texture": "uni"
+    },
+    {
+      "id": "rouge-brique",
+      "name": "Rouge brique",
+      "vinylColor": "#1a0d0d",
+      "accent": "#c1502e",
+      "label": "#f2ddc9",
+      "texture": "uni"
+    },
+    {
+      "id": "sauge",
+      "name": "Sauge",
+      "vinylColor": "#0e120e",
+      "accent": "#7fa06f",
+      "label": "#eef0e3",
+      "texture": "uni"
+    },
+    {
+      "id": "pochette",
+      "name": "Picture disc (pochette)",
+      "vinylColor": "#0b0b0d",
+      "accent": "#c97a3d",
+      "label": "#ead9b8",
+      "texture": "artwork"
+    },
+    {
+      "id": "custom",
+      "name": "Personnalisé",
+      "vinylColor": "#0b0b0d",
+      "accent": "#c97a3d",
+      "label": "#ead9b8",
+      "texture": "uni"
+    }
+  ]
+}

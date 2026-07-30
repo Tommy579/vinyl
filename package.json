@@ -1,0 +1,27 @@
+{
+  "name": "vinyle-windows",
+  "version": "1.0.0",
+  "description": "Platine vinyle virtuelle pour Windows, synchronisée avec l'app Apple Music (Microsoft Store)",
+  "main": "main.js",
+  "author": "Tom",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^43.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "optionalDependencies": {
+    "winax": "^3.6.9"
+  },
+  "build": {
+    "appId": "com.tom.vinyle",
+    "productName": "Vinyle",
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    }
+  }
+}
