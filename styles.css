@@ -226,20 +226,61 @@ html, body {
 .vinyl-grooves {
   position: absolute; inset: 4%;
   border-radius: 50%;
-  background: repeating-radial-gradient(
-    circle at center,
-    rgba(255,255,255,0.045) 0px, rgba(255,255,255,0.045) 1px,
-    transparent 2px, transparent 4px
-  );
+  background: 
+    repeating-radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.12) 0px,
+      rgba(255, 255, 255, 0.12) 1px,
+      transparent 2px,
+      transparent 4px
+    ),
+    repeating-radial-gradient(
+      circle at center,
+      rgba(0, 0, 0, 0.22) 1px,
+      rgba(0, 0, 0, 0.22) 2px,
+      transparent 3px,
+      transparent 4px
+    );
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
   pointer-events: none;
   z-index: 1;
 }
-.vinyl.is-light-vinyl .vinyl-grooves {
-  background: repeating-radial-gradient(
-    circle at center,
-    rgba(0,0,0,0.12) 0px, rgba(0,0,0,0.12) 1px,
-    transparent 2px, transparent 4px
+
+/* Effet de reflet conique (brillance vinyle) qui fait ressortir le relief des sillons */
+.vinyl-grooves::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 45deg at 50% 50%,
+    rgba(255, 255, 255, 0.15) 0deg,
+    transparent 45deg,
+    transparent 135deg,
+    rgba(255, 255, 255, 0.15) 180deg,
+    transparent 225deg,
+    transparent 315deg,
+    rgba(255, 255, 255, 0.15) 360deg
   );
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.vinyl.is-light-vinyl .vinyl-grooves {
+  background: 
+    repeating-radial-gradient(
+      circle at center,
+      rgba(0, 0, 0, 0.28) 0px,
+      rgba(0, 0, 0, 0.28) 1px,
+      transparent 2px,
+      transparent 4px
+    ),
+    repeating-radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.35) 1px,
+      rgba(255, 255, 255, 0.35) 2px,
+      transparent 3px,
+      transparent 4px
+    );
 }
 
 .label {
