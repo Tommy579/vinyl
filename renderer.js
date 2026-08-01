@@ -30,11 +30,9 @@
 
   const appThemeSelect = document.getElementById('app-theme-select');
   const tableWoodSelect = document.getElementById('table-wood-select');
-  const tableCustomField = document.getElementById('table-custom-field');
   const tableCustomColor = document.getElementById('table-custom-color');
 
   const vinylColorSelect = document.getElementById('vinyl-color-select');
-  const vinylCustomField = document.getElementById('vinyl-custom-field');
   const vinylCustomColor = document.getElementById('vinyl-custom-color');
 
   const textureSelect = document.getElementById('texture-select');
@@ -43,16 +41,31 @@
   document.getElementById('btn-min').addEventListener('click', () => window.vinyle.minimizeWindow());
   document.getElementById('btn-close').addEventListener('click', () => window.vinyle.closeWindow());
 
+  const DEMO_ARTWORK_SVG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+    <defs>
+      <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#c95a2e"/>
+        <stop offset="60%" stop-color="#7a2614"/>
+        <stop offset="100%" stop-color="#2a0d1d"/>
+      </linearGradient>
+    </defs>
+    <rect width="400" height="400" fill="url(#g)"/>
+    <circle cx="200" cy="200" r="140" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="4"/>
+    <circle cx="200" cy="200" r="90" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+    <text x="200" y="190" font-family="sans-serif" font-size="28" font-weight="bold" fill="#fff" text-anchor="middle">NOCTURNE</text>
+    <text x="200" y="225" font-family="sans-serif" font-size="14" fill="rgba(255,255,255,0.75)" letter-spacing="2" text-anchor="middle">MODE DÉMO</text>
+  </svg>`);
+
   // ------------------------------------------------------------- État
   let state = {
     connected: false,
     isPlaying: false,
-    title: null,
-    artist: '',
-    album: '',
+    title: 'Nocturne (démo)',
+    artist: 'Aperçu local',
+    album: 'Mode démonstration',
     duration: 210,
     position: 0,
-    artwork: null,
+    artwork: DEMO_ARTWORK_SVG,
   };
 
   let demoTicker = null;
@@ -60,19 +73,64 @@
   let dominantArtworkColor = null;
   let lastTrackTitle = null;
 
+  // -------------------------------------------------- Persistence des Thèmes
+  function saveThemeSettings() {
+    const settings = {
+      appTheme: appThemeSelect ? appThemeSelect.value : 'dark',
+      tableWood: tableWoodSelect ? tableWoodSelect.value : 'noyer',
+      tableCustomColor: tableCustomColor ? tableCustomColor.value : '#4a2c1a',
+      vinylColor: vinylColorSelect ? vinylColorSelect.value : 'black',
+      vinylCustomColor: vinylCustomColor ? vinylCustomColor.value : '#0b0b0d',
+      textureStyle: textureSelect ? textureSelect.value : 'artwork',
+      accentColor: accentColor ? accentColor.value : '#c97a3d',
+    };
+    localStorage.setItem('vinyle-theme-settings', JSON.stringify(settings));
+  }
+
+  function loadThemeSettings() {
+    const savedRaw = localStorage.getItem('vinyle-theme-settings');
+    let settings = {};
+    if (savedRaw) {
+      try {
+        settings = JSON.parse(savedRaw);
+      } catch (e) {}
+    }
+
+    const legacyAppTheme = localStorage.getItem('app-theme');
+
+    const appTheme = settings.appTheme || legacyAppTheme || 'dark';
+    const tableWood = settings.tableWood || 'noyer';
+    const tableCustomColorVal = settings.tableCustomColor || '#4a2c1a';
+    const vinylColor = settings.vinylColor || 'black';
+    const vinylCustomColorVal = settings.vinylCustomColor || '#0b0b0d';
+    const textureStyle = settings.textureStyle || 'artwork';
+    const accentColorVal = settings.accentColor || '#c97a3d';
+
+    if (appThemeSelect) appThemeSelect.value = appTheme;
+    if (tableWoodSelect) tableWoodSelect.value = tableWood;
+    if (tableCustomColor) tableCustomColor.value = tableCustomColorVal;
+    if (vinylColorSelect) vinylColorSelect.value = vinylColor;
+    if (vinylCustomColor) vinylCustomColor.value = vinylCustomColorVal;
+    if (textureSelect) textureSelect.value = textureStyle;
+    if (accentColor) accentColor.value = accentColorVal;
+
+    applyAppTheme(appTheme);
+    applyTableFinish();
+    applyVinylColor();
+    applyAccentColor();
+    refreshLabelArtworkVisibility();
+  }
+
   // ------------------------------------------------------- Thème Global App
   function applyAppTheme(mode) {
     document.documentElement.setAttribute('data-app-theme', mode);
-    localStorage.setItem('app-theme', mode);
     if (appThemeSelect) appThemeSelect.value = mode;
   }
-
-  const savedAppTheme = localStorage.getItem('app-theme') || 'dark';
-  applyAppTheme(savedAppTheme);
 
   if (appThemeSelect) {
     appThemeSelect.addEventListener('change', () => {
       applyAppTheme(appThemeSelect.value);
+      saveThemeSettings();
     });
   }
 
@@ -87,7 +145,7 @@
 
   function applyTableFinish() {
     const mode = tableWoodSelect.value;
-    tableCustomField.hidden = mode !== 'custom';
+    if (tableCustomColor) tableCustomColor.hidden = (mode !== 'custom');
 
     let c1, c2;
     if (mode === 'custom') {
@@ -103,8 +161,14 @@
     document.documentElement.style.setProperty('--plinth-wood-2', c2);
   }
 
-  tableWoodSelect.addEventListener('change', applyTableFinish);
-  tableCustomColor.addEventListener('input', applyTableFinish);
+  tableWoodSelect.addEventListener('change', () => {
+    applyTableFinish();
+    saveThemeSettings();
+  });
+  tableCustomColor.addEventListener('input', () => {
+    applyTableFinish();
+    saveThemeSettings();
+  });
 
   function adjustColorBrightness(hex, percent) {
     let num = parseInt(hex.replace('#', ''), 16);
@@ -129,13 +193,16 @@
 
   function applyVinylColor() {
     const mode = vinylColorSelect.value;
-    vinylCustomField.hidden = mode !== 'custom';
+    if (vinylCustomColor) vinylCustomColor.hidden = (mode !== 'custom');
 
     let color = '#0b0b0d';
     if (mode === 'white') {
       color = '#f2f2f4';
     } else if (mode === 'auto') {
-      color = dominantArtworkColor || '#0b0b0d';
+      if (!dominantArtworkColor && artworkImg && artworkImg.complete && artworkImg.naturalWidth > 0) {
+        extractDominantColor(artworkImg);
+      }
+      color = dominantArtworkColor || (accentColor ? accentColor.value : '#c97a3d');
     } else if (mode === 'custom') {
       color = vinylCustomColor.value;
     }
@@ -144,12 +211,42 @@
     vinyl.classList.toggle('is-light-vinyl', isLightColor(color));
   }
 
-  vinylColorSelect.addEventListener('change', applyVinylColor);
-  vinylCustomColor.addEventListener('input', applyVinylColor);
+  vinylColorSelect.addEventListener('change', () => {
+    applyVinylColor();
+    saveThemeSettings();
+  });
+  vinylCustomColor.addEventListener('input', () => {
+    applyVinylColor();
+    saveThemeSettings();
+  });
+
+  function applyAccentColor() {
+    if (accentColor) {
+      document.documentElement.style.setProperty('--accent', accentColor.value);
+    }
+  }
 
   accentColor.addEventListener('input', () => {
-    document.documentElement.style.setProperty('--accent', accentColor.value);
+    applyAccentColor();
+    saveThemeSettings();
   });
+
+  const accentPresets = document.getElementById('accent-presets');
+  if (accentPresets) {
+    accentPresets.querySelectorAll('.accent-dot').forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const color = dot.getAttribute('data-color');
+        if (color && accentColor) {
+          accentColor.value = color;
+          applyAccentColor();
+          if (vinylColorSelect && vinylColorSelect.value === 'auto' && !dominantArtworkColor) {
+            applyVinylColor();
+          }
+          saveThemeSettings();
+        }
+      });
+    });
+  }
 
   // ------------------------------------------------------- Extraction Couleur Pochette
   function extractDominantColor(img) {
@@ -157,10 +254,10 @@
     try {
       const cvs = document.createElement('canvas');
       const ctx = cvs.getContext('2d');
-      cvs.width = 16;
-      cvs.height = 16;
-      ctx.drawImage(img, 0, 0, 16, 16);
-      const data = ctx.getImageData(0, 0, 16, 16).data;
+      cvs.width = 32;
+      cvs.height = 32;
+      ctx.drawImage(img, 0, 0, 32, 32);
+      const data = ctx.getImageData(0, 0, 32, 32).data;
 
       let r = 0, g = 0, b = 0, count = 0;
       for (let i = 0; i < data.length; i += 4) {
@@ -175,7 +272,9 @@
         g = Math.round(g / count);
         b = Math.round(b / count);
         dominantArtworkColor = '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
-        applyVinylColor();
+        if (vinylColorSelect && vinylColorSelect.value === 'auto') {
+          applyVinylColor();
+        }
       }
     } catch (e) {
       dominantArtworkColor = null;
@@ -189,11 +288,18 @@
   function refreshLabelArtworkVisibility() {
     const val = textureSelect.value;
     const hasArtwork = !!state.artwork;
+    const isPictureDisc = val === 'full-picture';
+
+    vinyl.classList.toggle('is-picture-disc', isPictureDisc);
+    label.classList.toggle('is-picture-disc', isPictureDisc);
 
     if (val === 'artwork' || val === 'full-picture') {
       label.classList.toggle('has-artwork', hasArtwork);
       if (val === 'full-picture' && hasArtwork) {
-        vinyl.style.backgroundImage = `url(data:image/jpeg;base64,${state.artwork})`;
+        const srcUrl = state.artwork.startsWith('data:')
+          ? state.artwork
+          : `data:image/jpeg;base64,${state.artwork}`;
+        vinyl.style.backgroundImage = `url("${srcUrl}")`;
       } else {
         vinyl.style.backgroundImage = '';
       }
@@ -203,7 +309,10 @@
     }
   }
 
-  textureSelect.addEventListener('change', refreshLabelArtworkVisibility);
+  textureSelect.addEventListener('change', () => {
+    refreshLabelArtworkVisibility();
+    saveThemeSettings();
+  });
 
   drawerToggle.addEventListener('click', () => {
     const collapsed = drawerBody.classList.toggle('collapsed');
@@ -225,8 +334,8 @@
 
   // -------------------------------------------------- Bras interactif
   const REST_ANGLE = 0;     // bras vertical au repos (pause)
-  const DROP_ANGLE = -25;   // bras incliné au-dessus des sillons du vinyle (lecture)
-  const DROP_THRESHOLD = -10;
+  const DROP_ANGLE = 25;    // bras incliné vers la gauche au-dessus du vinyle (lecture)
+  const DROP_THRESHOLD = 10;
 
   let dragging = false;
 
@@ -237,8 +346,7 @@
     const dx = evt.clientX - pivotX;
     const dy = evt.clientY - pivotY;
     let deg = (Math.atan2(-dx, dy) * 180) / Math.PI;
-    deg = -Math.abs(deg);
-    return Math.max(DROP_ANGLE - 4, Math.min(REST_ANGLE, deg));
+    return Math.max(REST_ANGLE - 2, Math.min(DROP_ANGLE + 4, deg));
   }
 
   tonearm.addEventListener('pointerdown', (evt) => {
@@ -320,7 +428,9 @@
     trackAlbum.textContent = state.album || '';
 
     if (state.artwork) {
-      artworkImg.src = `data:image/jpeg;base64,${state.artwork}`;
+      artworkImg.src = state.artwork.startsWith('data:')
+        ? state.artwork
+        : `data:image/jpeg;base64,${state.artwork}`;
     } else {
       artworkImg.removeAttribute('src');
       dominantArtworkColor = null;
@@ -385,6 +495,7 @@
     state.artist = 'Aperçu local';
     state.album = 'Mode démonstration';
     state.duration = 210;
+    state.artwork = DEMO_ARTWORK_SVG;
     renderTrack();
     demoTicker = setInterval(() => {
       if (!state.isPlaying) return;
@@ -394,8 +505,7 @@
   }
 
   // état initial
-  applyTableFinish();
-  applyVinylColor();
+  loadThemeSettings();
   renderConnection();
   renderTrack();
 })();
