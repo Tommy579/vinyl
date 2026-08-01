@@ -563,40 +563,6 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
   border-color: var(--accent);
 }
 
-.accent-field {
-  margin-top: 4px;
-}
-.accent-control-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.color-picker-accent {
-  width: 34px;
-  height: 34px;
-  padding: 2px;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.accent-presets {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.accent-dot {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
-  padding: 0;
-  transition: transform 0.2s ease, border-color 0.2s ease;
-}
-.accent-dot:hover {
-  transform: scale(1.25);
-  border-color: var(--text-warm);
-}
-
 /* ------------------------------------------------------------- Modes d'affichage */
 .player-view {
   width: 100%;

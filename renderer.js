@@ -36,7 +36,6 @@
   const vinylCustomColor = document.getElementById('vinyl-custom-color');
 
   const textureSelect = document.getElementById('texture-select');
-  const accentColor = document.getElementById('accent-color');
 
   document.getElementById('btn-min').addEventListener('click', () => window.vinyle.minimizeWindow());
   document.getElementById('btn-close').addEventListener('click', () => window.vinyle.closeWindow());
@@ -139,6 +138,7 @@
     if (vinylOnlyOptions) vinylOnlyOptions.hidden = (mode !== 'vinyl');
     if (ipodOnlyOptions) ipodOnlyOptions.hidden = (mode !== 'ipod');
     if (displayModeSelect) displayModeSelect.value = mode;
+    applyAccentColor();
   }
 
   if (displayModeSelect) {
@@ -176,6 +176,10 @@
 
     document.documentElement.style.setProperty('--ipod-body-1', c1);
     document.documentElement.style.setProperty('--ipod-body-2', c2);
+
+    if (displayModeSelect && displayModeSelect.value === 'ipod') {
+      applyAccentColor();
+    }
 
     // Écran
     applyIpodScreenBg();
@@ -215,7 +219,6 @@
       vinylColor: vinylColorSelect ? vinylColorSelect.value : 'black',
       vinylCustomColor: vinylCustomColor ? vinylCustomColor.value : '#0b0b0d',
       textureStyle: textureSelect ? textureSelect.value : 'artwork',
-      accentColor: accentColor ? accentColor.value : '#c97a3d',
       ipodColor: ipodColorSelect ? ipodColorSelect.value : 'slate',
       ipodCustomColor: ipodCustomColor ? ipodCustomColor.value : '#363a40',
       ipodScreenBg: ipodScreenBgSelect ? ipodScreenBgSelect.value : 'black',
@@ -242,7 +245,6 @@
     const vinylColor = settings.vinylColor || 'black';
     const vinylCustomColorVal = settings.vinylCustomColor || '#0b0b0d';
     const textureStyle = settings.textureStyle || 'artwork';
-    const accentColorVal = settings.accentColor || '#c97a3d';
     const ipodColor = settings.ipodColor || 'slate';
     const ipodCustomColorVal = settings.ipodCustomColor || '#363a40';
     const ipodScreenBg = settings.ipodScreenBg || 'black';
@@ -255,18 +257,16 @@
     if (vinylColorSelect) vinylColorSelect.value = vinylColor;
     if (vinylCustomColor) vinylCustomColor.value = vinylCustomColorVal;
     if (textureSelect) textureSelect.value = textureStyle;
-    if (accentColor) accentColor.value = accentColorVal;
     if (ipodColorSelect) ipodColorSelect.value = ipodColor;
     if (ipodCustomColor) ipodCustomColor.value = ipodCustomColorVal;
     if (ipodScreenBgSelect) ipodScreenBgSelect.value = ipodScreenBg;
     if (ipodScreenCustomColor) ipodScreenCustomColor.value = ipodScreenCustomColorVal;
 
-    applyDisplayMode(displayMode);
     applyAppTheme(appTheme);
     applyTableFinish();
     applyVinylColor();
-    applyAccentColor();
     applyIpodColors();
+    applyDisplayMode(displayMode);
     refreshLabelArtworkVisibility();
   }
 
@@ -292,22 +292,35 @@
     erable: { c1: '#d9be95', c2: '#9e8257' },
   };
 
+  function getTableWoodColor() {
+    if (!tableWoodSelect) return '#4a2c1a';
+    const mode = tableWoodSelect.value;
+    if (mode === 'custom' && tableCustomColor) {
+      return tableCustomColor.value;
+    }
+    const preset = WOOD_PRESETS[mode] || WOOD_PRESETS.noyer;
+    return preset.c1;
+  }
+
   function applyTableFinish() {
     const mode = tableWoodSelect.value;
     if (tableCustomColor) tableCustomColor.hidden = (mode !== 'custom');
 
-    let c1, c2;
+    let c1 = getTableWoodColor();
+    let c2;
     if (mode === 'custom') {
-      c1 = tableCustomColor.value;
       c2 = adjustColorBrightness(c1, -30);
     } else {
       const preset = WOOD_PRESETS[mode] || WOOD_PRESETS.noyer;
-      c1 = preset.c1;
       c2 = preset.c2;
     }
 
     document.documentElement.style.setProperty('--plinth-wood-1', c1);
     document.documentElement.style.setProperty('--plinth-wood-2', c2);
+
+    if (displayModeSelect && displayModeSelect.value === 'vinyl') {
+      applyAccentColor();
+    }
   }
 
   tableWoodSelect.addEventListener('change', () => {
@@ -340,6 +353,40 @@
     return brightness > 165;
   }
 
+  // ------------------------------------------------------- Couleur d'Accentuation Dynamique
+  const CASSETTE_REC_RED = '#e63946';
+
+  function getIpodColor() {
+    if (!ipodColorSelect) return '#484c52';
+    const mode = ipodColorSelect.value;
+    if (mode === 'custom' && ipodCustomColor) {
+      return ipodCustomColor.value;
+    }
+    const preset = IPOD_COLOR_PRESETS[mode] || IPOD_COLOR_PRESETS.slate;
+    return preset.c1;
+  }
+
+  function getAccentColor() {
+    const mode = displayModeSelect ? displayModeSelect.value : 'vinyl';
+    if (mode === 'cassette') {
+      return CASSETTE_REC_RED;
+    } else if (mode === 'ipod') {
+      return getIpodColor();
+    } else {
+      return getTableWoodColor();
+    }
+  }
+
+  const btnPlayPauseEl = document.getElementById('btn-playpause');
+
+  function applyAccentColor() {
+    const val = getAccentColor();
+    document.documentElement.style.setProperty('--accent', val);
+    if (btnPlayPauseEl) {
+      btnPlayPauseEl.classList.toggle('is-dark-accent', !isLightColor(val));
+    }
+  }
+
   function applyVinylColor() {
     const mode = vinylColorSelect.value;
     if (vinylCustomColor) vinylCustomColor.hidden = (mode !== 'custom');
@@ -351,7 +398,7 @@
       if (!dominantArtworkColor && artworkImg && artworkImg.complete && artworkImg.naturalWidth > 0) {
         extractDominantColor(artworkImg);
       }
-      color = dominantArtworkColor || (accentColor ? accentColor.value : '#c97a3d');
+      color = dominantArtworkColor || getAccentColor();
     } else if (mode === 'custom') {
       color = vinylCustomColor.value;
     }
@@ -368,40 +415,6 @@
     applyVinylColor();
     saveThemeSettings();
   });
-
-  const btnPlayPauseEl = document.getElementById('btn-playpause');
-
-  function applyAccentColor() {
-    if (accentColor) {
-      const val = accentColor.value;
-      document.documentElement.style.setProperty('--accent', val);
-      if (btnPlayPauseEl) {
-        btnPlayPauseEl.classList.toggle('is-dark-accent', !isLightColor(val));
-      }
-    }
-  }
-
-  accentColor.addEventListener('input', () => {
-    applyAccentColor();
-    saveThemeSettings();
-  });
-
-  const accentPresets = document.getElementById('accent-presets');
-  if (accentPresets) {
-    accentPresets.querySelectorAll('.accent-dot').forEach((dot) => {
-      dot.addEventListener('click', () => {
-        const color = dot.getAttribute('data-color');
-        if (color && accentColor) {
-          accentColor.value = color;
-          applyAccentColor();
-          if (vinylColorSelect && vinylColorSelect.value === 'auto' && !dominantArtworkColor) {
-            applyVinylColor();
-          }
-          saveThemeSettings();
-        }
-      });
-    });
-  }
 
   // ------------------------------------------------------- Extraction Couleur Pochette
   function extractDominantColor(img) {
@@ -619,7 +632,16 @@
 
     // Mises à jour Cassette & iPod
     if (cassetteHandwritingTitle) cassetteHandwritingTitle.textContent = state.title || 'MIX TAPE VOL. 1';
-    if (cassetteHandwritingArtist) cassetteHandwritingArtist.textContent = state.artist || 'Love ♡ Mix';
+    if (cassetteHandwritingArtist) {
+      let artistName = state.artist || 'Love ♡ Mix';
+      if (artistName && artistName !== 'Love ♡ Mix') {
+        const parts = artistName.split(/\s*[\u2014\u2013]|\s+-\s+/);
+        if (parts.length > 1) {
+          artistName = parts[0].trim();
+        }
+      }
+      cassetteHandwritingArtist.textContent = artistName;
+    }
 
     if (ipodSongTitle) ipodSongTitle.textContent = state.title || 'Aucun morceau';
     if (ipodArtistName) ipodArtistName.textContent = state.artist || 'Apple Music';

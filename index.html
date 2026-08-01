@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-<meta charset="UTF-8" />
-<title>Vintage Sound</title>
-<link rel="stylesheet" href="styles.css" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Ink+Free&family=Shadows+Into+Light&family=Reenie+Beanie&family=Outfit:wght@500;600;700;800&family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <title>Vintage Sound</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Ink+Free&family=Shadows+Into+Light&family=Reenie+Beanie&family=Outfit:wght@500;600;700;800&family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet" />
 </head>
+
 <body>
 
   <!-- Barre de titre custom (fenêtre sans cadre) -->
@@ -55,14 +59,15 @@
           <div class="plinth-label">MD&nbsp;·&nbsp;WIN</div>
         </div>
 
-        <p class="hint" id="drop-hint"><span class="hint-dot"></span>Fais glisser le bras vers le disque pour lancer la lecture</p>
+        <p class="hint" id="drop-hint"><span class="hint-dot"></span>Fais glisser le bras vers le disque pour lancer la
+          lecture</p>
       </div>
 
       <!-- LECTEUR CASSETTE FERGUSON -->
       <div class="player-view view-cassette" id="view-cassette" hidden>
         <div class="cassette-deck">
           <div class="cassette-speaker-grille"></div>
-          
+
           <div class="cassette-window" id="cassette-window">
             <div class="cassette-door-hinge" id="cassette-door">
               <div class="cassette-glass-cover"></div>
@@ -113,7 +118,7 @@
           </div>
 
           <div class="cassette-control-panel">
-            <div class="cassette-brand-badge">FERGUSON</div>
+            <div class="cassette-brand-badge">VU</div>
             <div class="cassette-level-meter">
               <div class="meter-bar" id="meter-bar"></div>
             </div>
@@ -199,15 +204,19 @@
         <div class="player-card-divider"></div>
 
         <div class="transport">
-          <button id="btn-prev" class="ctrl-btn" title="Précédent"><img src="assets/previous.png" alt="Précédent" class="ctrl-icon" /></button>
-          <button id="btn-playpause" class="ctrl-btn ctrl-btn-lg" title="Lecture / Pause"><img id="icon-playpause" src="assets/play.png" alt="Lecture" class="ctrl-icon" /></button>
-          <button id="btn-next" class="ctrl-btn" title="Suivant"><img src="assets/next.png" alt="Suivant" class="ctrl-icon" /></button>
+          <button id="btn-prev" class="ctrl-btn" title="Précédent"><img src="assets/previous.png" alt="Précédent"
+              class="ctrl-icon" /></button>
+          <button id="btn-playpause" class="ctrl-btn ctrl-btn-lg" title="Lecture / Pause"><img id="icon-playpause"
+              src="assets/play.png" alt="Lecture" class="ctrl-icon" /></button>
+          <button id="btn-next" class="ctrl-btn" title="Suivant"><img src="assets/next.png" alt="Suivant"
+              class="ctrl-icon" /></button>
         </div>
 
         <div class="progress">
           <span id="time-current">0:00</span>
           <div class="custom-slider-wrap">
-            <input type="range" id="seek" class="modern-slider progress-read-only" min="0" max="100" value="0" disabled tabindex="-1" />
+            <input type="range" id="seek" class="modern-slider progress-read-only" min="0" max="100" value="0" disabled
+              tabindex="-1" />
           </div>
           <span id="time-total">0:00</span>
         </div>
@@ -215,7 +224,7 @@
 
       <div class="theme-drawer">
         <button class="drawer-toggle" id="drawer-toggle">
-          <span class="drawer-title">🎨 Personnaliser l'apparence</span>
+          <span class="drawer-title">Personnaliser l'apparence</span>
           <span id="drawer-arrow" class="drawer-arrow">▾</span>
         </button>
 
@@ -224,9 +233,9 @@
             <label class="field">
               <span>Mode d'affichage</span>
               <select id="display-mode-select">
-                <option value="vinyl" selected>Platine Vinyle 🛈</option>
-                <option value="cassette">Lecteur Cassette Ferguson 📼</option>
-                <option value="ipod">iPod Nano 📱</option>
+                <option value="vinyl" selected>Platine Vinyle</option>
+                <option value="cassette">Lecteur Cassette</option>
+                <option value="ipod">iPod Nano</option>
               </select>
             </label>
 
@@ -251,7 +260,8 @@
                     <option value="erable">Bois — Érable crème</option>
                     <option value="custom">Couleur personnalisée</option>
                   </select>
-                  <input type="color" id="table-custom-color" class="color-picker-inline" value="#4a2c1a" title="Choisir une couleur" hidden />
+                  <input type="color" id="table-custom-color" class="color-picker-inline" value="#4a2c1a"
+                    title="Choisir une couleur" hidden />
                 </div>
               </label>
 
@@ -264,7 +274,8 @@
                     <option value="auto">Auto (Couleur de la pochette)</option>
                     <option value="custom">Couleur personnalisée</option>
                   </select>
-                  <input type="color" id="vinyl-custom-color" class="color-picker-inline" value="#0b0b0d" title="Choisir une couleur" hidden />
+                  <input type="color" id="vinyl-custom-color" class="color-picker-inline" value="#0b0b0d"
+                    title="Choisir une couleur" hidden />
                 </div>
               </label>
 
@@ -292,7 +303,8 @@
                     <option value="red">PRODUCT (RED)</option>
                     <option value="custom">Couleur personnalisée</option>
                   </select>
-                  <input type="color" id="ipod-custom-color" class="color-picker-inline" value="#363a40" title="Choisir une couleur" hidden />
+                  <input type="color" id="ipod-custom-color" class="color-picker-inline" value="#363a40"
+                    title="Choisir une couleur" hidden />
                 </div>
               </label>
 
@@ -306,32 +318,22 @@
                     <option value="auto">Auto (Couleur de la pochette)</option>
                     <option value="custom">Couleur personnalisée</option>
                   </select>
-                  <input type="color" id="ipod-screen-custom-color" class="color-picker-inline" value="#000000" title="Choisir une couleur" hidden />
+                  <input type="color" id="ipod-screen-custom-color" class="color-picker-inline" value="#000000"
+                    title="Choisir une couleur" hidden />
                 </div>
               </label>
             </div>
           </div>
 
-          <label class="field accent-field">
-            <span>Couleur d'accentuation</span>
-            <div class="accent-control-row">
-              <input type="color" id="accent-color" class="color-picker-accent" value="#c97a3d" />
-              <div class="accent-presets" id="accent-presets">
-                <button type="button" class="accent-dot" data-color="#c97a3d" style="background:#c97a3d" title="Cuivre"></button>
-                <button type="button" class="accent-dot" data-color="#d4af37" style="background:#d4af37" title="Or"></button>
-                <button type="button" class="accent-dot" data-color="#e63946" style="background:#e63946" title="Rouge"></button>
-                <button type="button" class="accent-dot" data-color="#2a9d8f" style="background:#2a9d8f" title="Émeraude"></button>
-                <button type="button" class="accent-dot" data-color="#457b9d" style="background:#457b9d" title="Bleu Saphir"></button>
-                <button type="button" class="accent-dot" data-color="#9d4edd" style="background:#9d4edd" title="Violet Améthyste"></button>
-              </div>
-            </div>
-          </label>
         </div>
       </div>
+
+    </section>
 
     </section>
   </main>
 
   <script src="renderer.js"></script>
 </body>
+
 </html>
