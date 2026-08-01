@@ -438,11 +438,11 @@ html, body {
   background: var(--accent);
   border: none;
   color: #120c08; font-size: 18px;
-  box-shadow: 0 4px 14px rgba(201, 122, 61, 0.35);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 .ctrl-btn-lg:hover {
   transform: scale(1.08);
-  box-shadow: 0 6px 18px rgba(201, 122, 61, 0.5);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 65%, transparent);
   background: var(--accent);
 }
 .ctrl-icon {

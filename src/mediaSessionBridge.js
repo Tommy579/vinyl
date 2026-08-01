@@ -54,10 +54,10 @@ class MediaSessionBridge {
     );
   }
 
-  _sendCommand(action) {
+  _sendCommand(action, ...args) {
     execFile(
       'powershell.exe',
-      ['-ExecutionPolicy', 'Bypass', '-File', this.scriptPath, action],
+      ['-ExecutionPolicy', 'Bypass', '-File', this.scriptPath, action, ...args.map(String)],
       { windowsHide: true, timeout: 3000 },
       () => {}
     );
@@ -116,12 +116,16 @@ class MediaSessionBridge {
     this._sendCommand('previous');
   }
 
-  seekTo(_seconds) {
-    //
+  seekTo(seconds) {
+    if (this.currentState) {
+      this.currentState.position = seconds;
+      this.currentState.lastUpdated = new Date().toISOString();
+    }
+    this._sendCommand('seek', seconds);
   }
 
-  setVolume(_percent) {
-    //
+  setVolume(percent) {
+    this._sendCommand('volume', percent);
   }
 }
 

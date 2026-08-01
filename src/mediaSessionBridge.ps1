@@ -53,6 +53,65 @@ try {
         $res = Await-Operation $op ([bool])
         @{ success = $res } | ConvertTo-Json -Compress
         exit
+    } elseif ($action -eq "seek") {
+        $seconds = [double]$args[1]
+        $ticks = [long]($seconds * 10000000)
+        $op = $session.TryChangePlaybackPositionAsync($ticks)
+        $res = Await-Operation $op ([bool])
+        @{ success = $res } | ConvertTo-Json -Compress
+        exit
+    } elseif ($action -eq "volume") {
+        $percent = [double]$args[1]
+        $volumeCode = @"
+using System;
+using System.Runtime.InteropServices;
+
+[ComImport]
+[Guid("BCDE0385-4644-426C-88F1-BD84414E165E")]
+internal class MMDeviceEnumeratorComObject { }
+
+[Guid("A95664D2-9614-4F35-A746-DE8DB63617E6"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface IMMDeviceEnumerator {
+    int EnumAudioEndpoints(int dataFlow, int stateMask, out object devices);
+    int GetDefaultAudioEndpoint(int dataFlow, int role, out IMMDevice endpoint);
+}
+
+[Guid("D666063F-1587-4E43-81F1-B948E807363F"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface IMMDevice {
+    int Activate(ref Guid iid, int dwClsCtx, IntPtr pActivationParams, [MarshalAs(UnmanagedType.IUnknown)] out object ppInterface);
+}
+
+[Guid("5CDF2C82-841E-4546-9722-0CF74078229A"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface IAudioEndpointVolume {
+    int RegisterControlChangeNotify(IntPtr pNotify);
+    int UnregisterControlChangeNotify(IntPtr pNotify);
+    int GetChannelCount(out uint pnChannelCount);
+    int SetMasterVolumeLevel(float fLevelDB, ref Guid pguidEventContext);
+    int SetMasterVolumeLevelScalar(float fLevel, ref Guid pguidEventContext);
+    int GetMasterVolumeLevel(out float pfLevelDB);
+    int GetMasterVolumeLevelScalar(out float pfLevel);
+}
+
+public class WindowsAudioController {
+    public static void SetVolume(float level) {
+        try {
+            var enumerator = (IMMDeviceEnumerator)new MMDeviceEnumeratorComObject();
+            IMMDevice dev;
+            enumerator.GetDefaultAudioEndpoint(0, 1, out dev);
+            Guid iid = typeof(IAudioEndpointVolume).GUID;
+            object epvObj;
+            dev.Activate(ref iid, 23, IntPtr.Zero, out epvObj);
+            var epv = (IAudioEndpointVolume)epvObj;
+            Guid ctx = Guid.Empty;
+            epv.SetMasterVolumeLevelScalar(level, ref ctx);
+        } catch { }
+    }
+}
+"@
+        Add-Type -TypeDefinition $volumeCode -ErrorAction SilentlyContinue
+        [WindowsAudioController]::SetVolume([float]($percent / 100.0))
+        @{ success = $true } | ConvertTo-Json -Compress
+        exit
     }
 
     $propOp = $session.TryGetMediaPropertiesAsync()
