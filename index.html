@@ -239,42 +239,44 @@
               </select>
             </label>
 
-            <label class="field">
-              <span>Finition de la table</span>
-              <div class="field-control-group">
-                <select id="table-wood-select">
-                  <option value="noyer" selected>Bois — Noyer massif</option>
-                  <option value="chene">Bois — Chêne clair</option>
-                  <option value="acajou">Bois — Acajou rouge</option>
-                  <option value="ebene">Bois — Ébène foncé</option>
-                  <option value="erable">Bois — Érable crème</option>
-                  <option value="custom">Couleur personnalisée</option>
-                </select>
-                <input type="color" id="table-custom-color" class="color-picker-inline" value="#4a2c1a" title="Choisir une couleur" hidden />
-              </div>
-            </label>
+            <div id="vinyl-only-options" class="vinyl-only-options">
+              <label class="field">
+                <span>Finition de la table</span>
+                <div class="field-control-group">
+                  <select id="table-wood-select">
+                    <option value="noyer" selected>Bois — Noyer massif</option>
+                    <option value="chene">Bois — Chêne clair</option>
+                    <option value="acajou">Bois — Acajou rouge</option>
+                    <option value="ebene">Bois — Ébène foncé</option>
+                    <option value="erable">Bois — Érable crème</option>
+                    <option value="custom">Couleur personnalisée</option>
+                  </select>
+                  <input type="color" id="table-custom-color" class="color-picker-inline" value="#4a2c1a" title="Choisir une couleur" hidden />
+                </div>
+              </label>
 
-            <label class="field">
-              <span>Couleur du disque vinyle</span>
-              <div class="field-control-group">
-                <select id="vinyl-color-select">
-                  <option value="black" selected>Noir classique</option>
-                  <option value="white">Blanc pur</option>
-                  <option value="auto">Auto (Couleur de la pochette)</option>
-                  <option value="custom">Couleur personnalisée</option>
-                </select>
-                <input type="color" id="vinyl-custom-color" class="color-picker-inline" value="#0b0b0d" title="Choisir une couleur" hidden />
-              </div>
-            </label>
+              <label class="field">
+                <span>Couleur du disque vinyle</span>
+                <div class="field-control-group">
+                  <select id="vinyl-color-select">
+                    <option value="black" selected>Noir classique</option>
+                    <option value="white">Blanc pur</option>
+                    <option value="auto">Auto (Couleur de la pochette)</option>
+                    <option value="custom">Couleur personnalisée</option>
+                  </select>
+                  <input type="color" id="vinyl-custom-color" class="color-picker-inline" value="#0b0b0d" title="Choisir me couleur" hidden />
+                </div>
+              </label>
 
-            <label class="field">
-              <span>Style du macaron central</span>
-              <select id="texture-select">
-                <option value="artwork" selected>Pochette d'album au centre (macaron)</option>
-                <option value="uni">Macaron couleur unie</option>
-                <option value="full-picture">Picture disc (pochette entière)</option>
-              </select>
-            </label>
+              <label class="field">
+                <span>Style du macaron central</span>
+                <select id="texture-select">
+                  <option value="artwork" selected>Pochette d'album au centre (macaron)</option>
+                  <option value="uni">Macaron couleur unie</option>
+                  <option value="full-picture">Picture disc (pochette entière)</option>
+                </select>
+              </label>
+            </div>
           </div>
 
           <label class="field accent-field">

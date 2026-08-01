@@ -124,11 +124,14 @@
   setInterval(updateIpodClock, 1000);
   updateIpodClock();
 
+  const vinylOnlyOptions = document.getElementById('vinyl-only-options');
+
   // -------------------------------------------------- Mode d'affichage (Vinyle / Cassette / iPod)
   function applyDisplayMode(mode) {
     if (viewVinyl) viewVinyl.hidden = (mode !== 'vinyl');
     if (viewCassette) viewCassette.hidden = (mode !== 'cassette');
     if (viewIpod) viewIpod.hidden = (mode !== 'ipod');
+    if (vinylOnlyOptions) vinylOnlyOptions.hidden = (mode !== 'vinyl');
     if (displayModeSelect) displayModeSelect.value = mode;
   }
 
