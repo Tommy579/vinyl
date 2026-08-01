@@ -20,6 +20,7 @@
   --font-display: 'Plus Jakarta Sans', 'Fraunces', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', Consolas, "Segoe UI Mono", monospace;
+  --font-handwriting: 'Caveat', 'Comic Sans MS', cursive, sans-serif;
 }
 
 [data-app-theme="light"] {
@@ -820,8 +821,8 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
 }
 .sticker-handwriting-title {
   flex: 1;
-  font-family: 'Caveat', cursive, sans-serif;
-  font-size: 22px;
+  font-family: var(--font-handwriting);
+  font-size: 24px;
   font-weight: 700;
   color: #1a233a;
   white-space: nowrap;
@@ -900,8 +901,8 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
 }
 .sticker-handwriting-artist {
   flex: 1;
-  font-family: 'Caveat', cursive, sans-serif;
-  font-size: 19px;
+  font-family: var(--font-handwriting);
+  font-size: 21px;
   font-weight: 700;
   color: #8b1e10;
   white-space: nowrap;
