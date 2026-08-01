@@ -647,25 +647,22 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
   width: 100%;
   height: 200px;
   border-radius: 10px;
-  background: radial-gradient(ellipse at center, rgba(30,30,34,0.8) 0%, rgba(10,10,12,0.95) 100%);
+  background: radial-gradient(ellipse at center, rgba(30,30,34,0.85) 0%, rgba(10,10,12,0.98) 100%);
   border: 2px solid #444;
-  box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 0 2px 8px rgba(0,0,0,0.5);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.95), 0 2px 8px rgba(0,0,0,0.5);
   padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: visible; /* Permet à la cassette de déborder et de sortir devant */
-  z-index: 10;
+  overflow: visible;
 }
 
-/* Porte en plastique transparent articulée sur la charnière inférieure */
+/* Porte en plastique transparent (Trappe) */
 .cassette-door-hinge {
   position: relative;
   width: 100%;
   height: 100%;
-  transform-origin: bottom center;
-  transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.4s ease;
   z-index: 20;
 }
 
@@ -673,78 +670,93 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
   position: absolute;
   inset: -2px;
   border-radius: 8px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.03) 40%, rgba(0,0,0,0.15) 100%);
-  border: 1px solid rgba(255,255,255,0.25);
-  box-shadow: inset 0 1px 2px rgba(255,255,255,0.3), 0 4px 10px rgba(0,0,0,0.5);
+  background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.04) 40%, rgba(0,0,0,0.2) 100%);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.35), 0 4px 12px rgba(0,0,0,0.6);
   pointer-events: none;
   z-index: 30;
 }
 
-/* Animation d'ouverture/fermeture du compartiment transparent */
+/* Animation purement 2D d'ouverture de trappe et d'éjection/insertion de cassette */
 .cassette-window.swapping .cassette-door-hinge {
-  animation: cassetteDoorAnimation 1.6s cubic-bezier(0.33, 1, 0.68, 1) forwards !important;
+  animation: cassetteDoorAnimation2D 1.6s ease forwards !important;
 }
 
-/* Animation d'éjection, de décalage et d'insertion de la cassette */
 .cassette-window.swapping .cassette-body {
-  animation: cassetteSwapAnimation 1.6s cubic-bezier(0.33, 1, 0.68, 1) forwards !important;
+  animation: cassetteSwapAnimation2D 1.6s cubic-bezier(0.33, 1, 0.68, 1) forwards !important;
 }
 
-@keyframes cassetteDoorAnimation {
-  0% { transform: rotateX(0deg); }
-  25% { transform: rotateX(-36deg); } /* Ouverture complète de la vitre transparente vers l'avant */
-  75% { transform: rotateX(-36deg); }
-  100% { transform: rotateX(0deg); }   /* Fermeture */
+@keyframes cassetteDoorAnimation2D {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(6px); } /* La vitre s'abaisse légèrement pour déverrouiller */
+  75% { transform: translateY(6px); }
+  100% { transform: translateY(0); }
 }
 
-@keyframes cassetteSwapAnimation {
+@keyframes cassetteSwapAnimation2D {
   0% {
-    transform: translateY(0) translateZ(0) rotate(0deg);
+    transform: translateY(0) scale(1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     opacity: 1;
   }
   25% {
-    /* La cassette sort complètement du lecteur vers le haut et l'avant (z-index supérieur) */
-    transform: translateY(-95px) translateZ(120px) scale(1.05);
+    /* La cassette monte hors du lecteur avec une ombre portée 2D accentuée */
+    transform: translateY(-90px) scale(1.04);
+    box-shadow: 0 25px 40px rgba(0,0,0,0.7);
     opacity: 1;
   }
   42% {
-    /* La cassette se décale amplement sur le côté gauche */
-    transform: translateY(-110px) translateX(-220px) translateZ(140px) rotate(-18deg) scale(1.05);
+    /* Éjection vers la gauche */
+    transform: translateY(-105px) translateX(-200px) scale(1.04);
+    box-shadow: 0 25px 40px rgba(0,0,0,0.4);
     opacity: 0;
   }
   43% {
-    /* La nouvelle cassette arrive depuis la droite au tout premier plan */
-    transform: translateY(-110px) translateX(220px) translateZ(140px) rotate(18deg) scale(1.05);
+    /* Entrée depuis la droite */
+    transform: translateY(-105px) translateX(200px) scale(1.04);
+    box-shadow: 0 25px 40px rgba(0,0,0,0.4);
     opacity: 0;
   }
   65% {
-    /* La nouvelle cassette se place au-dessus du compartiment ouvert au premier plan */
-    transform: translateY(-95px) translateX(0) translateZ(120px) scale(1.05);
+    /* Positionnement au-dessus du lecteur */
+    transform: translateY(-90px) translateX(0) scale(1.04);
+    box-shadow: 0 25px 40px rgba(0,0,0,0.7);
     opacity: 1;
   }
   85% {
-    /* Insertion dans la trappe */
-    transform: translateY(0) translateZ(0) scale(1);
+    /* Insertion */
+    transform: translateY(0) scale(1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     opacity: 1;
   }
   100% {
-    transform: translateY(0) translateZ(0) scale(1);
+    transform: translateY(0) scale(1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     opacity: 1;
   }
 }
 
+/* Corps 2D sculpté de la cassette avec biseautage et ombres multiples */
 .cassette-body {
   position: relative;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #28282c 0%, #151518 100%);
+  background: 
+    linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 12%),
+    linear-gradient(135deg, #2e2e34 0%, #1a1a1e 50%, #121215 100%);
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-bottom-color: rgba(0,0,0,0.6);
+  box-shadow: 
+    inset 0 1px 1px rgba(255,255,255,0.3),
+    inset 0 -2px 6px rgba(0,0,0,0.8),
+    inset 2px 2px 4px rgba(255,255,255,0.08),
+    0 6px 16px rgba(0,0,0,0.65);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 6px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* Vis de fixation coins */
