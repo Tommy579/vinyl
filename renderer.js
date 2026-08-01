@@ -443,10 +443,16 @@
     extractDominantColor(artworkImg);
   });
 
+  const vinylColorField = document.getElementById('vinyl-color-field');
+
   function refreshLabelArtworkVisibility() {
     const val = textureSelect.value;
     const hasArtwork = !!state.artwork;
     const isPictureDisc = val === 'full-picture';
+
+    if (vinylColorField) {
+      vinylColorField.hidden = isPictureDisc;
+    }
 
     vinyl.classList.toggle('is-picture-disc', isPictureDisc);
     label.classList.toggle('is-picture-disc', isPictureDisc);
