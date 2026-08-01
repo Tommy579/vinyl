@@ -700,31 +700,31 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
     opacity: 1;
   }
   25% {
-    /* La cassette monte hors du lecteur avec une ombre portée 2D accentuée */
-    transform: translateY(-90px) scale(1.04);
+    /* La cassette descend et sort du lecteur par le bas */
+    transform: translateY(90px) scale(1.04);
     box-shadow: 0 25px 40px rgba(0,0,0,0.7);
     opacity: 1;
   }
   42% {
-    /* Éjection vers la gauche */
-    transform: translateY(-105px) translateX(-200px) scale(1.04);
+    /* Éjection par le bas vers la gauche */
+    transform: translateY(105px) translateX(-200px) scale(1.04);
     box-shadow: 0 25px 40px rgba(0,0,0,0.4);
     opacity: 0;
   }
   43% {
-    /* Entrée depuis la droite */
-    transform: translateY(-105px) translateX(200px) scale(1.04);
+    /* Entrée depuis la droite par le bas */
+    transform: translateY(105px) translateX(200px) scale(1.04);
     box-shadow: 0 25px 40px rgba(0,0,0,0.4);
     opacity: 0;
   }
   65% {
-    /* Positionnement au-dessus du lecteur */
-    transform: translateY(-90px) translateX(0) scale(1.04);
+    /* Positionnement en-dessous du lecteur */
+    transform: translateY(90px) translateX(0) scale(1.04);
     box-shadow: 0 25px 40px rgba(0,0,0,0.7);
     opacity: 1;
   }
   85% {
-    /* Insertion */
+    /* Insertion par le bas */
     transform: translateY(0) scale(1);
     box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     opacity: 1;
