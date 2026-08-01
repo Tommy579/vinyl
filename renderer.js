@@ -369,9 +369,15 @@
     saveThemeSettings();
   });
 
+  const btnPlayPauseEl = document.getElementById('btn-playpause');
+
   function applyAccentColor() {
     if (accentColor) {
-      document.documentElement.style.setProperty('--accent', accentColor.value);
+      const val = accentColor.value;
+      document.documentElement.style.setProperty('--accent', val);
+      if (btnPlayPauseEl) {
+        btnPlayPauseEl.classList.toggle('is-dark-accent', !isLightColor(val));
+      }
     }
   }
 

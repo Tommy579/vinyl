@@ -456,6 +456,10 @@ html, body {
   width: 22px;
   height: 22px;
   filter: brightness(0.1);
+  transition: filter 0.3s ease;
+}
+.ctrl-btn-lg.is-dark-accent .ctrl-icon {
+  filter: brightness(0) invert(1);
 }
 
 .progress, .volume { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--text-dim); }
