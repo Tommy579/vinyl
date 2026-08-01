@@ -996,10 +996,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
   padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  color: #fff;
+  color: var(--ipod-text-main, #fff);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   overflow: hidden;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.ipod-screen.is-light-screen {
+  --ipod-text-main: #111111;
+  --ipod-text-sub: #444444;
+  --ipod-border-sub: rgba(0,0,0,0.15);
+  --ipod-bar-bg: #d0d0d0;
 }
 
 .ipod-statusbar {
@@ -1008,10 +1015,11 @@ input[type="range"]::-webkit-slider-thumb:hover {
   align-items: center;
   font-size: 11px;
   font-weight: 600;
-  color: #ddd;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
+  color: var(--ipod-text-sub, #ddd);
+  border-bottom: 1px solid var(--ipod-border-sub, rgba(255,255,255,0.15));
   padding-bottom: 4px;
   margin-bottom: 8px;
+  transition: color 0.3s ease, border-color 0.3s ease;
 }
 .ipod-status-icons { display: flex; gap: 6px; align-items: center; }
 
@@ -1051,14 +1059,16 @@ input[type="range"]::-webkit-slider-thumb:hover {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #fff;
+  color: var(--ipod-text-main, #fff);
+  transition: color 0.3s ease;
 }
 .ipod-artist-name, .ipod-album-name {
   font-size: 11px;
-  color: #aaa;
+  color: var(--ipod-text-sub, #aaa);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.3s ease;
 }
 
 .ipod-progress-wrap {
@@ -1067,15 +1077,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
   align-items: center;
   gap: 6px;
   font-size: 9px;
-  color: #888;
+  color: var(--ipod-text-sub, #888);
   margin-top: 4px;
+  transition: color 0.3s ease;
 }
 .ipod-progress-bar {
   flex: 1;
   height: 5px;
-  background: #333;
+  background: var(--ipod-bar-bg, #333);
   border-radius: 3px;
   overflow: hidden;
+  transition: background 0.3s ease;
 }
 .ipod-progress-fill {
   width: 0%;

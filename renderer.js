@@ -181,6 +181,8 @@
     applyIpodScreenBg();
   }
 
+  const ipodScreen = document.querySelector('.ipod-screen');
+
   function applyIpodScreenBg() {
     if (!ipodScreenBgSelect) return;
     const mode = ipodScreenBgSelect.value;
@@ -193,6 +195,9 @@
     else if (mode === 'custom') bg = ipodScreenCustomColor.value;
 
     document.documentElement.style.setProperty('--ipod-screen-bg', bg);
+    if (ipodScreen) {
+      ipodScreen.classList.toggle('is-light-screen', isLightColor(bg));
+    }
   }
 
   if (ipodColorSelect) ipodColorSelect.addEventListener('change', () => { applyIpodColors(); saveThemeSettings(); });
