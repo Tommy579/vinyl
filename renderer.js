@@ -488,11 +488,16 @@
 
   volume.addEventListener('input', () => window.vinyle.setVolume(Number(volume.value)));
 
+  const iconPlayPause = document.getElementById('icon-playpause');
+
   // ---------------------------------------------------------- Rendu
   function renderPlayState() {
     vinyl.classList.toggle('playing', state.isPlaying);
     if (viewCassette) viewCassette.classList.toggle('playing', state.isPlaying);
-    btnPlayPause.textContent = state.isPlaying ? '❚❚' : '▶';
+    if (iconPlayPause) {
+      iconPlayPause.src = state.isPlaying ? 'assets/pause.png' : 'assets/play.png';
+      iconPlayPause.alt = state.isPlaying ? 'Pause' : 'Lecture';
+    }
     if (ipodPlayIcon) ipodPlayIcon.textContent = state.isPlaying ? '▶' : '❚❚';
     if (meterBar) meterBar.style.width = state.isPlaying ? '75%' : '5%';
   }

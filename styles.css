@@ -404,6 +404,18 @@ html, body {
   box-shadow: 0 6px 18px rgba(201, 122, 61, 0.5);
   background: var(--accent);
 }
+.ctrl-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: brightness(0.9) invert(0.85);
+  pointer-events: none;
+}
+.ctrl-btn-lg .ctrl-icon {
+  width: 22px;
+  height: 22px;
+  filter: brightness(0.1);
+}
 
 .progress, .volume { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--text-dim); }
 input[type="range"] {
