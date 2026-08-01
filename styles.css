@@ -623,6 +623,7 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  perspective: 1000px;
 }
 
 .cassette-speaker-grille {
@@ -637,6 +638,8 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
   background-position: 0 0, 3px 3px;
   border: 1px solid rgba(0,0,0,0.6);
   box-shadow: inset 0 2px 6px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.1);
+  position: relative;
+  z-index: 1;
 }
 
 .cassette-window {
@@ -651,8 +654,8 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  perspective: 900px;
+  overflow: visible; /* Permet à la cassette de déborder et de sortir devant */
+  z-index: 10;
 }
 
 /* Porte en plastique transparent articulée sur la charnière inférieure */
@@ -663,6 +666,7 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
   transform-origin: bottom center;
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 20;
 }
 
 .cassette-glass-cover {
@@ -673,7 +677,7 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
   border: 1px solid rgba(255,255,255,0.25);
   box-shadow: inset 0 1px 2px rgba(255,255,255,0.3), 0 4px 10px rgba(0,0,0,0.5);
   pointer-events: none;
-  z-index: 20;
+  z-index: 30;
 }
 
 /* Animation d'ouverture/fermeture du compartiment transparent */
@@ -688,9 +692,9 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
 
 @keyframes cassetteDoorAnimation {
   0% { transform: rotateX(0deg); }
-  22% { transform: rotateX(-32deg); } /* Ouverture de la trappe transparente vers l'avant */
-  78% { transform: rotateX(-32deg); }
-  100% { transform: rotateX(0deg); }  /* Fermeture de la trappe transparente */
+  25% { transform: rotateX(-36deg); } /* Ouverture complète de la vitre transparente vers l'avant */
+  75% { transform: rotateX(-36deg); }
+  100% { transform: rotateX(0deg); }   /* Fermeture */
 }
 
 @keyframes cassetteSwapAnimation {
@@ -699,32 +703,32 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
     opacity: 1;
   }
   25% {
-    /* La cassette sort vers le haut/l'avant du compartiment ouvert */
-    transform: translateY(-80px) translateZ(50px) rotate(0deg);
+    /* La cassette sort complètement du lecteur vers le haut et l'avant (z-index supérieur) */
+    transform: translateY(-95px) translateZ(120px) scale(1.05);
     opacity: 1;
   }
   42% {
-    /* La cassette actuelle se décale sur le côté (gauche) et s'efface */
-    transform: translateY(-100px) translateX(-180px) translateZ(30px) rotate(-15deg);
+    /* La cassette se décale amplement sur le côté gauche */
+    transform: translateY(-110px) translateX(-220px) translateZ(140px) rotate(-18deg) scale(1.05);
     opacity: 0;
   }
   43% {
-    /* La nouvelle cassette arrive depuis le côté droit */
-    transform: translateY(-100px) translateX(180px) translateZ(30px) rotate(15deg);
+    /* La nouvelle cassette arrive depuis la droite au tout premier plan */
+    transform: translateY(-110px) translateX(220px) translateZ(140px) rotate(18deg) scale(1.05);
     opacity: 0;
   }
   65% {
-    /* La nouvelle cassette se positionne au-dessus du compartiment ouvert */
-    transform: translateY(-80px) translateX(0) translateZ(50px) rotate(0deg);
+    /* La nouvelle cassette se place au-dessus du compartiment ouvert au premier plan */
+    transform: translateY(-95px) translateX(0) translateZ(120px) scale(1.05);
     opacity: 1;
   }
   85% {
-    /* La nouvelle cassette s'insère à l'intérieur du compartiment */
-    transform: translateY(0) translateZ(0) rotate(0deg);
+    /* Insertion dans la trappe */
+    transform: translateY(0) translateZ(0) scale(1);
     opacity: 1;
   }
   100% {
-    transform: translateY(0) translateZ(0) rotate(0deg);
+    transform: translateY(0) translateZ(0) scale(1);
     opacity: 1;
   }
 }
