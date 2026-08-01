@@ -559,7 +559,18 @@
   btnPrev.addEventListener('click', () => window.vinyle.previous());
   btnNext.addEventListener('click', () => window.vinyle.next());
 
-  seek.addEventListener('input', () => { userIsSeeking = true; });
+  function updateSliderFill(sliderEl) {
+    if (!sliderEl) return;
+    const val = sliderEl.value;
+    const max = sliderEl.max || 100;
+    const pct = (val / max) * 100;
+    sliderEl.style.setProperty('--slider-pct', `${pct}%`);
+  }
+
+  seek.addEventListener('input', () => {
+    userIsSeeking = true;
+    updateSliderFill(seek);
+  });
   seek.addEventListener('change', () => {
     const seconds = (seek.value / 100) * (state.duration || 210);
     state.position = seconds;
@@ -568,7 +579,10 @@
     renderProgress();
   });
 
-  volume.addEventListener('input', () => window.vinyle.setVolume(Number(volume.value)));
+  volume.addEventListener('input', () => {
+    updateSliderFill(volume);
+    window.vinyle.setVolume(Number(volume.value));
+  });
 
   const iconPlayPause = document.getElementById('icon-playpause');
 
@@ -631,6 +645,8 @@
     if (!userIsSeeking) {
       seek.value = state.duration ? (state.position / state.duration) * 100 : 0;
     }
+    updateSliderFill(seek);
+    updateSliderFill(volume);
 
     // iPod progress
     const pct = state.duration ? (state.position / state.duration) * 100 : 0;

@@ -203,13 +203,18 @@
 
         <div class="progress">
           <span id="time-current">0:00</span>
-          <input type="range" id="seek" min="0" max="100" value="0" />
+          <div class="custom-slider-wrap">
+            <input type="range" id="seek" class="modern-slider" min="0" max="100" value="0" />
+          </div>
           <span id="time-total">0:00</span>
         </div>
 
         <div class="volume">
           <span class="volume-icon">🔈</span>
-          <input type="range" id="volume" min="0" max="100" value="80" />
+          <div class="custom-slider-wrap">
+            <input type="range" id="volume" class="modern-slider" min="0" max="100" value="80" />
+          </div>
+          <span class="volume-icon-high">🔊</span>
         </div>
       </div>
 
