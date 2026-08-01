@@ -567,23 +567,6 @@
     sliderEl.style.setProperty('--slider-pct', `${pct}%`);
   }
 
-  seek.addEventListener('input', () => {
-    userIsSeeking = true;
-    updateSliderFill(seek);
-  });
-  seek.addEventListener('change', () => {
-    const seconds = (seek.value / 100) * (state.duration || 210);
-    state.position = seconds;
-    if (state.connected) window.vinyle.seek(seconds);
-    userIsSeeking = false;
-    renderProgress();
-  });
-
-  volume.addEventListener('input', () => {
-    updateSliderFill(volume);
-    window.vinyle.setVolume(Number(volume.value));
-  });
-
   const iconPlayPause = document.getElementById('icon-playpause');
 
   // ---------------------------------------------------------- Rendu
@@ -642,11 +625,8 @@
   function renderProgress() {
     timeCurrent.textContent = formatTime(state.position);
     timeTotal.textContent = formatTime(state.duration);
-    if (!userIsSeeking) {
-      seek.value = state.duration ? (state.position / state.duration) * 100 : 0;
-    }
+    seek.value = state.duration ? (state.position / state.duration) * 100 : 0;
     updateSliderFill(seek);
-    updateSliderFill(volume);
 
     // iPod progress
     const pct = state.duration ? (state.position / state.duration) * 100 : 0;

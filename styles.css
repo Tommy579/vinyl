@@ -473,15 +473,6 @@ input[type="range"].modern-slider {
   width: 100%;
   height: 4px;
   border-radius: 999px;
-  background: var(--slider-track-bg, rgba(255, 255, 255, 0.12));
-  outline: none;
-  cursor: pointer;
-  margin: 0;
-  transition: height 0.2s ease, background 0.2s ease;
-}
-
-/* Remplissage dynamique coloré (Chrome / Edge / Safari) */
-input[type="range"].modern-slider {
   background: linear-gradient(
     to right,
     var(--accent) 0%,
@@ -489,34 +480,18 @@ input[type="range"].modern-slider {
     rgba(255, 255, 255, 0.15) var(--slider-pct, 0%),
     rgba(255, 255, 255, 0.15) 100%
   );
+  outline: none;
+  cursor: default;
+  pointer-events: none;
+  margin: 0;
 }
 
-/* Curseur (Thumb) blanc pill arrondi - masqué par défaut, apparaît UNIQUEMENT en HOVER ou DRAG */
+/* Pas de bouton blanc au survol ou à l'interaction */
 input[type="range"].modern-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 18px;
-  height: 14px;
-  border-radius: 7px;
-  background: #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 0, 0, 0.1);
-  cursor: grab;
-  opacity: 0;
-  transform: scale(0.6);
-  transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
-}
-
-/* Apparition du curseur blanc au survol (hover) ou clic (active) */
-.custom-slider-wrap:hover input[type="range"].modern-slider::-webkit-slider-thumb,
-input[type="range"].modern-slider:hover::-webkit-slider-thumb,
-input[type="range"].modern-slider:active::-webkit-slider-thumb {
-  opacity: 1;
-  transform: scale(1);
-}
-
-input[type="range"].modern-slider::-webkit-slider-thumb:active {
-  cursor: grabbing;
-  background: #f0f0f0;
-  transform: scale(1.1);
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .theme-drawer {
