@@ -73,9 +73,76 @@
   let dominantArtworkColor = null;
   let lastTrackTitle = null;
 
+  // -------------------------------------------------- Éléments des vues alternatives
+  const displayModeSelect = document.getElementById('display-mode-select');
+  const viewVinyl = document.getElementById('view-vinyl');
+  const viewCassette = document.getElementById('view-cassette');
+  const viewIpod = document.getElementById('view-ipod');
+
+  // Cassette
+  const cassetteHandwritingTitle = document.getElementById('cassette-handwriting-title');
+  const cassetteHandwritingArtist = document.getElementById('cassette-handwriting-artist');
+  const tapeLeft = document.getElementById('tape-left');
+  const tapeRight = document.getElementById('tape-right');
+  const meterBar = document.getElementById('meter-bar');
+  const ckeyPlay = document.getElementById('ckey-play');
+  const ckeyStop = document.getElementById('ckey-stop');
+  const ckeyRew = document.getElementById('ckey-rew');
+  const ckeyFf = document.getElementById('ckey-ff');
+
+  // iPod
+  const ipodSongTitle = document.getElementById('ipod-song-title');
+  const ipodArtistName = document.getElementById('ipod-artist-name');
+  const ipodAlbumName = document.getElementById('ipod-album-name');
+  const ipodArtworkBox = document.querySelector('.ipod-artwork-box');
+  const ipodArtworkImg = document.getElementById('ipod-artwork-img');
+  const ipodTimeCur = document.getElementById('ipod-time-cur');
+  const ipodTimeRem = document.getElementById('ipod-time-rem');
+  const ipodProgressFill = document.getElementById('ipod-progress-fill');
+  const ipodPlayIcon = document.getElementById('ipod-play-icon');
+  const ipodClock = document.getElementById('ipod-clock');
+
+  // Boutons Wheel iPod
+  document.getElementById('wheel-playpause').addEventListener('click', () => requestPlayPause());
+  document.getElementById('wheel-center').addEventListener('click', () => requestPlayPause());
+  document.getElementById('wheel-prev').addEventListener('click', () => window.vinyle.previous());
+  document.getElementById('wheel-next').addEventListener('click', () => window.vinyle.next());
+
+  // Boutons Cassette
+  if (ckeyPlay) ckeyPlay.addEventListener('click', () => requestPlayPause());
+  if (ckeyStop) ckeyStop.addEventListener('click', () => { if (state.isPlaying) requestPlayPause(); });
+  if (ckeyRew) ckeyRew.addEventListener('click', () => window.vinyle.previous());
+  if (ckeyFf) ckeyFf.addEventListener('click', () => window.vinyle.next());
+
+  // Horloge iPod
+  function updateIpodClock() {
+    const d = new Date();
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    if (ipodClock) ipodClock.textContent = `${hh}:${mm}`;
+  }
+  setInterval(updateIpodClock, 1000);
+  updateIpodClock();
+
+  // -------------------------------------------------- Mode d'affichage (Vinyle / Cassette / iPod)
+  function applyDisplayMode(mode) {
+    if (viewVinyl) viewVinyl.hidden = (mode !== 'vinyl');
+    if (viewCassette) viewCassette.hidden = (mode !== 'cassette');
+    if (viewIpod) viewIpod.hidden = (mode !== 'ipod');
+    if (displayModeSelect) displayModeSelect.value = mode;
+  }
+
+  if (displayModeSelect) {
+    displayModeSelect.addEventListener('change', () => {
+      applyDisplayMode(displayModeSelect.value);
+      saveThemeSettings();
+    });
+  }
+
   // -------------------------------------------------- Persistence des Thèmes
   function saveThemeSettings() {
     const settings = {
+      displayMode: displayModeSelect ? displayModeSelect.value : 'vinyl',
       appTheme: appThemeSelect ? appThemeSelect.value : 'dark',
       tableWood: tableWoodSelect ? tableWoodSelect.value : 'noyer',
       tableCustomColor: tableCustomColor ? tableCustomColor.value : '#4a2c1a',
@@ -98,6 +165,7 @@
 
     const legacyAppTheme = localStorage.getItem('app-theme');
 
+    const displayMode = settings.displayMode || 'vinyl';
     const appTheme = settings.appTheme || legacyAppTheme || 'dark';
     const tableWood = settings.tableWood || 'noyer';
     const tableCustomColorVal = settings.tableCustomColor || '#4a2c1a';
@@ -106,6 +174,7 @@
     const textureStyle = settings.textureStyle || 'artwork';
     const accentColorVal = settings.accentColor || '#c97a3d';
 
+    if (displayModeSelect) displayModeSelect.value = displayMode;
     if (appThemeSelect) appThemeSelect.value = appTheme;
     if (tableWoodSelect) tableWoodSelect.value = tableWood;
     if (tableCustomColor) tableCustomColor.value = tableCustomColorVal;
@@ -114,6 +183,7 @@
     if (textureSelect) textureSelect.value = textureStyle;
     if (accentColor) accentColor.value = accentColorVal;
 
+    applyDisplayMode(displayMode);
     applyAppTheme(appTheme);
     applyTableFinish();
     applyVinylColor();
@@ -333,8 +403,9 @@
   });
 
   // -------------------------------------------------- Bras interactif
-  const REST_ANGLE = 0;     // bras vertical au repos (pause)
-  const DROP_ANGLE = 25;    // bras incliné vers la gauche au-dessus du vinyle (lecture)
+  const REST_ANGLE = 0;           // bras au repos (vertical = 0°)
+  const DROP_START_ANGLE = 19;    // bord extérieur du vinyle (début de piste)
+  const DROP_END_ANGLE = 33;      // fin de piste près du macaron central
   const DROP_THRESHOLD = 10;
 
   let dragging = false;
@@ -345,8 +416,9 @@
     const pivotY = rect.top + 12;
     const dx = evt.clientX - pivotX;
     const dy = evt.clientY - pivotY;
-    let deg = (Math.atan2(-dx, dy) * 180) / Math.PI;
-    return Math.max(REST_ANGLE - 2, Math.min(DROP_ANGLE + 4, deg));
+    let deg = (Math.atan2(dx, dy) * 180) / Math.PI;
+    deg = Math.abs(deg);
+    return Math.max(REST_ANGLE, Math.min(DROP_END_ANGLE + 4, deg));
   }
 
   tonearm.addEventListener('pointerdown', (evt) => {
@@ -369,9 +441,16 @@
     userDropTonearm(dropped);
   });
 
+  function getActivePlaybackAngle() {
+    const ratio = state.duration ? Math.max(0, Math.min(1, state.position / state.duration)) : 0;
+    return DROP_START_ANGLE + ratio * (DROP_END_ANGLE - DROP_START_ANGLE);
+  }
+
   function setTonearmVisual(dropped) {
+    if (dragging) return;
     tonearm.classList.toggle('dropped', dropped);
-    tonearm.style.transform = `rotate(${dropped ? DROP_ANGLE : REST_ANGLE}deg)`;
+    const angle = dropped ? getActivePlaybackAngle() : REST_ANGLE;
+    tonearm.style.transform = `rotate(${angle}deg)`;
     dropHint.style.opacity = dropped ? '0' : '1';
   }
 
@@ -412,7 +491,10 @@
   // ---------------------------------------------------------- Rendu
   function renderPlayState() {
     vinyl.classList.toggle('playing', state.isPlaying);
+    if (viewCassette) viewCassette.classList.toggle('playing', state.isPlaying);
     btnPlayPause.textContent = state.isPlaying ? '❚❚' : '▶';
+    if (ipodPlayIcon) ipodPlayIcon.textContent = state.isPlaying ? '▶' : '❚❚';
+    if (meterBar) meterBar.style.width = state.isPlaying ? '75%' : '5%';
   }
 
   function formatTime(sec) {
@@ -427,12 +509,29 @@
     trackArtist.textContent = state.artist || (state.connected ? 'En pause' : 'Lance la lecture dans Apple Music');
     trackAlbum.textContent = state.album || '';
 
+    // Mises à jour Cassette & iPod
+    if (cassetteHandwritingTitle) cassetteHandwritingTitle.textContent = state.title || 'MIX TAPE VOL. 1';
+    if (cassetteHandwritingArtist) cassetteHandwritingArtist.textContent = state.artist || 'Love ♡ Mix';
+
+    if (ipodSongTitle) ipodSongTitle.textContent = state.title || 'Aucun morceau';
+    if (ipodArtistName) ipodArtistName.textContent = state.artist || 'Apple Music';
+    if (ipodAlbumName) ipodAlbumName.textContent = state.album || '';
+
     if (state.artwork) {
-      artworkImg.src = state.artwork.startsWith('data:')
+      const srcUrl = state.artwork.startsWith('data:')
         ? state.artwork
         : `data:image/jpeg;base64,${state.artwork}`;
+      artworkImg.src = srcUrl;
+      if (ipodArtworkImg) {
+        ipodArtworkImg.src = srcUrl;
+        if (ipodArtworkBox) ipodArtworkBox.classList.add('has-artwork');
+      }
     } else {
       artworkImg.removeAttribute('src');
+      if (ipodArtworkImg) {
+        ipodArtworkImg.removeAttribute('src');
+        if (ipodArtworkBox) ipodArtworkBox.classList.remove('has-artwork');
+      }
       dominantArtworkColor = null;
       applyVinylColor();
     }
@@ -445,6 +544,29 @@
     if (!userIsSeeking) {
       seek.value = state.duration ? (state.position / state.duration) * 100 : 0;
     }
+
+    // iPod progress
+    const pct = state.duration ? (state.position / state.duration) * 100 : 0;
+    if (ipodProgressFill) ipodProgressFill.style.width = `${pct}%`;
+    if (ipodTimeCur) ipodTimeCur.textContent = formatTime(state.position);
+    const remSec = (state.duration || 0) - (state.position || 0);
+    if (ipodTimeRem) ipodTimeRem.textContent = `-${formatTime(remSec)}`;
+
+    // Tape rolls progress (les bobines de cassette se vident/remplissent)
+    const ratio = state.duration ? (state.position / state.duration) : 0;
+    const leftSize = 85 - (ratio * 33);
+    const rightSize = 52 + (ratio * 33);
+    if (tapeLeft) {
+      tapeLeft.style.width = `${leftSize}px`;
+      tapeLeft.style.height = `${leftSize}px`;
+    }
+    if (tapeRight) {
+      tapeRight.style.width = `${rightSize}px`;
+      tapeRight.style.height = `${rightSize}px`;
+    }
+
+    // Mise à jour de la position du bras de vinyle en continu pendant la lecture
+    setTonearmVisual(state.isPlaying);
   }
 
   function renderConnection() {

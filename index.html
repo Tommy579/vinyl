@@ -5,7 +5,7 @@
 <title>Vinyle</title>
 <link rel="stylesheet" href="styles.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
 <body>
 
@@ -23,36 +23,159 @@
 
   <main class="stage">
 
-    <!-- Platine -->
+    <!-- Zone d'affichage lectrice -->
     <section class="turntable-wrap">
-      <div class="plinth">
-        <div class="plinth-grain"></div>
 
-        <div class="platter">
-          <div class="vinyl" id="vinyl">
-            <div class="vinyl-grooves"></div>
-            <div class="label" id="vinyl-label">
-              <img id="artwork-img" alt="" />
-              <div class="label-fallback" id="label-fallback">♪</div>
-            </div>
-            <div class="spindle-hole"></div>
-          </div>
-        </div>
+      <!-- PLATINE VINYLE -->
+      <div class="player-view view-vinyl" id="view-vinyl">
+        <div class="plinth">
+          <div class="plinth-grain"></div>
 
-        <!-- Bras de lecture interactif -->
-        <div class="tonearm-base">
-          <div class="tonearm" id="tonearm">
-            <div class="tonearm-tube"></div>
-            <div class="tonearm-head">
-              <div class="stylus-tip"></div>
+          <div class="platter">
+            <div class="vinyl" id="vinyl">
+              <div class="vinyl-grooves"></div>
+              <div class="label" id="vinyl-label">
+                <img id="artwork-img" alt="" />
+                <div class="label-fallback" id="label-fallback">♪</div>
+              </div>
+              <div class="spindle-hole"></div>
             </div>
           </div>
+
+          <!-- Bras de lecture interactif -->
+          <div class="tonearm-base">
+            <div class="tonearm" id="tonearm">
+              <div class="tonearm-tube"></div>
+              <div class="tonearm-head">
+                <div class="stylus-tip"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="plinth-label">MD&nbsp;·&nbsp;WIN</div>
         </div>
 
-        <div class="plinth-label">MD&nbsp;·&nbsp;WIN</div>
+        <p class="hint" id="drop-hint"><span class="hint-dot"></span>Fais glisser le bras vers le disque pour lancer la lecture</p>
       </div>
 
-      <p class="hint" id="drop-hint"><span class="hint-dot"></span>Fais glisser le bras vers le disque pour lancer la lecture</p>
+      <!-- LECTEUR CASSETTE FERGUSON -->
+      <div class="player-view view-cassette" id="view-cassette" hidden>
+        <div class="cassette-deck">
+          <div class="cassette-speaker-grille"></div>
+          
+          <div class="cassette-window">
+            <div class="cassette-body">
+              <div class="cassette-screw top-left"></div>
+              <div class="cassette-screw top-right"></div>
+              <div class="cassette-screw bottom-left"></div>
+              <div class="cassette-screw bottom-right"></div>
+
+              <!-- Étiquette Papier Style Mixtape -->
+              <div class="cassette-paper-sticker">
+                <div class="sticker-top-bar">
+                  <div class="sticker-side-tag">A</div>
+                  <div class="sticker-handwriting-title" id="cassette-handwriting-title">AWESOME MIX VOL. 1</div>
+                  <div class="sticker-c90-badge">C-90</div>
+                </div>
+
+                <div class="sticker-middle-cutout">
+                  <div class="cassette-spools">
+                    <div class="cassette-spool left" id="spool-left">
+                      <div class="spool-teeth"></div>
+                      <div class="tape-roll" id="tape-left"></div>
+                    </div>
+                    <div class="cassette-tape-viewfinder">
+                      <div class="viewfinder-lines"></div>
+                    </div>
+                    <div class="cassette-spool right" id="spool-right">
+                      <div class="spool-teeth"></div>
+                      <div class="tape-roll" id="tape-right"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="sticker-bottom-bar">
+                  <div class="sticker-brand-name">Elite®</div>
+                  <div class="sticker-handwriting-artist" id="cassette-handwriting-artist">Love ♡ Mix</div>
+                  <div class="sticker-tech-tag">NORMAL POSITION</div>
+                </div>
+              </div>
+
+              <div class="cassette-bottom-holes">
+                <div class="hole"></div>
+                <div class="hole"></div>
+                <div class="hole"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cassette-control-panel">
+            <div class="cassette-brand-badge">FERGUSON</div>
+            <div class="cassette-level-meter">
+              <div class="meter-bar" id="meter-bar"></div>
+            </div>
+          </div>
+
+          <div class="cassette-keys">
+            <button class="cassette-key key-rec" title="Record"><span class="key-top">REC</span></button>
+            <button class="cassette-key" id="ckey-rew" title="Rewind"><span>REW</span></button>
+            <button class="cassette-key" id="ckey-ff" title="Forward"><span>FF</span></button>
+            <button class="cassette-key key-play" id="ckey-play" title="Play / Pause"><span>PLAY</span></button>
+            <button class="cassette-key" id="ckey-stop" title="Stop"><span>STOP</span></button>
+            <div class="cassette-knob-wrap">
+              <div class="knob-label">VOL</div>
+              <div class="cassette-knob" id="cassette-knob">
+                <div class="knob-indicator"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cassette-handle"></div>
+        </div>
+      </div>
+
+      <!-- IPOD NANO -->
+      <div class="player-view view-ipod" id="view-ipod" hidden>
+        <div class="ipod-device">
+          <div class="ipod-screen">
+            <div class="ipod-statusbar">
+              <span class="ipod-time" id="ipod-clock">10:45</span>
+              <div class="ipod-status-icons">
+                <span id="ipod-play-icon">▶</span>
+                <span class="ipod-battery">🔋</span>
+              </div>
+            </div>
+            <div class="ipod-nowplaying">
+              <div class="ipod-artwork-box">
+                <img id="ipod-artwork-img" alt="" />
+                <div class="ipod-artwork-fallback" id="ipod-artwork-fallback">♪</div>
+              </div>
+              <div class="ipod-meta">
+                <div class="ipod-song-title" id="ipod-song-title">Don't stop</div>
+                <div class="ipod-artist-name" id="ipod-artist-name">Jeune Morty</div>
+                <div class="ipod-album-name" id="ipod-album-name">Single</div>
+              </div>
+              <div class="ipod-progress-wrap">
+                <span id="ipod-time-cur">0:40</span>
+                <div class="ipod-progress-bar">
+                  <div class="ipod-progress-fill" id="ipod-progress-fill"></div>
+                </div>
+                <span id="ipod-time-rem">-2:02</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Click Wheel iPod -->
+          <div class="click-wheel">
+            <button class="wheel-btn btn-menu" id="wheel-menu">MENU</button>
+            <button class="wheel-btn btn-prev" id="wheel-prev">⏮</button>
+            <button class="wheel-btn btn-next" id="wheel-next">⏭</button>
+            <button class="wheel-btn btn-playpause" id="wheel-playpause">▶❚❚</button>
+            <button class="wheel-center" id="wheel-center"></button>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- Panneau latéral -->
@@ -98,6 +221,15 @@
 
         <div class="drawer-body" id="drawer-body">
           <div class="fields-grid">
+            <label class="field">
+              <span>Mode d'affichage</span>
+              <select id="display-mode-select">
+                <option value="vinyl" selected>Platine Vinyle 🛈</option>
+                <option value="cassette">Lecteur Cassette Ferguson 📼</option>
+                <option value="ipod">iPod Nano 📱</option>
+              </select>
+            </label>
+
             <label class="field">
               <span>Thème de l'interface</span>
               <select id="app-theme-select">
