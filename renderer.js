@@ -125,6 +125,11 @@
   updateIpodClock();
 
   const vinylOnlyOptions = document.getElementById('vinyl-only-options');
+  const ipodOnlyOptions = document.getElementById('ipod-only-options');
+  const ipodColorSelect = document.getElementById('ipod-color-select');
+  const ipodCustomColor = document.getElementById('ipod-custom-color');
+  const ipodScreenBgSelect = document.getElementById('ipod-screen-bg-select');
+  const ipodScreenCustomColor = document.getElementById('ipod-screen-custom-color');
 
   // -------------------------------------------------- Mode d'affichage (Vinyle / Cassette / iPod)
   function applyDisplayMode(mode) {
@@ -132,6 +137,7 @@
     if (viewCassette) viewCassette.hidden = (mode !== 'cassette');
     if (viewIpod) viewIpod.hidden = (mode !== 'ipod');
     if (vinylOnlyOptions) vinylOnlyOptions.hidden = (mode !== 'vinyl');
+    if (ipodOnlyOptions) ipodOnlyOptions.hidden = (mode !== 'ipod');
     if (displayModeSelect) displayModeSelect.value = mode;
   }
 
@@ -141,6 +147,58 @@
       saveThemeSettings();
     });
   }
+
+  // -------------------------------------------------- Couleurs iPod & Écran iPod
+  const IPOD_COLOR_PRESETS = {
+    slate: { c1: '#484c52', c2: '#22252a' },
+    silver: { c1: '#e1e4e8', c2: '#a1a8b0' },
+    black: { c1: '#262626', c2: '#0d0d0d' },
+    blue: { c1: '#2980b9', c2: '#1a5276' },
+    green: { c1: '#27ae60', c2: '#1e8449' },
+    purple: { c1: '#8e44ad', c2: '#5e3370' },
+    red: { c1: '#c0392b', c2: '#7b241c' },
+  };
+
+  function applyIpodColors() {
+    if (!ipodColorSelect) return;
+    const mode = ipodColorSelect.value;
+    if (ipodCustomColor) ipodCustomColor.hidden = (mode !== 'custom');
+
+    let c1, c2;
+    if (mode === 'custom') {
+      c1 = ipodCustomColor.value;
+      c2 = adjustColorBrightness(c1, -35);
+    } else {
+      const preset = IPOD_COLOR_PRESETS[mode] || IPOD_COLOR_PRESETS.slate;
+      c1 = preset.c1;
+      c2 = preset.c2;
+    }
+
+    document.documentElement.style.setProperty('--ipod-body-1', c1);
+    document.documentElement.style.setProperty('--ipod-body-2', c2);
+
+    // Écran
+    applyIpodScreenBg();
+  }
+
+  function applyIpodScreenBg() {
+    if (!ipodScreenBgSelect) return;
+    const mode = ipodScreenBgSelect.value;
+    if (ipodScreenCustomColor) ipodScreenCustomColor.hidden = (mode !== 'custom');
+
+    let bg = '#000000';
+    if (mode === 'darkgray') bg = '#1e2022';
+    else if (mode === 'navy') bg = '#0b1626';
+    else if (mode === 'auto') bg = dominantArtworkColor || '#000000';
+    else if (mode === 'custom') bg = ipodScreenCustomColor.value;
+
+    document.documentElement.style.setProperty('--ipod-screen-bg', bg);
+  }
+
+  if (ipodColorSelect) ipodColorSelect.addEventListener('change', () => { applyIpodColors(); saveThemeSettings(); });
+  if (ipodCustomColor) ipodCustomColor.addEventListener('input', () => { applyIpodColors(); saveThemeSettings(); });
+  if (ipodScreenBgSelect) ipodScreenBgSelect.addEventListener('change', () => { applyIpodScreenBg(); saveThemeSettings(); });
+  if (ipodScreenCustomColor) ipodScreenCustomColor.addEventListener('input', () => { applyIpodScreenBg(); saveThemeSettings(); });
 
   // -------------------------------------------------- Persistence des Thèmes
   function saveThemeSettings() {
@@ -153,6 +211,10 @@
       vinylCustomColor: vinylCustomColor ? vinylCustomColor.value : '#0b0b0d',
       textureStyle: textureSelect ? textureSelect.value : 'artwork',
       accentColor: accentColor ? accentColor.value : '#c97a3d',
+      ipodColor: ipodColorSelect ? ipodColorSelect.value : 'slate',
+      ipodCustomColor: ipodCustomColor ? ipodCustomColor.value : '#363a40',
+      ipodScreenBg: ipodScreenBgSelect ? ipodScreenBgSelect.value : 'black',
+      ipodScreenCustomColor: ipodScreenCustomColor ? ipodScreenCustomColor.value : '#000000',
     };
     localStorage.setItem('vinyle-theme-settings', JSON.stringify(settings));
   }
@@ -176,6 +238,10 @@
     const vinylCustomColorVal = settings.vinylCustomColor || '#0b0b0d';
     const textureStyle = settings.textureStyle || 'artwork';
     const accentColorVal = settings.accentColor || '#c97a3d';
+    const ipodColor = settings.ipodColor || 'slate';
+    const ipodCustomColorVal = settings.ipodCustomColor || '#363a40';
+    const ipodScreenBg = settings.ipodScreenBg || 'black';
+    const ipodScreenCustomColorVal = settings.ipodScreenCustomColor || '#000000';
 
     if (displayModeSelect) displayModeSelect.value = displayMode;
     if (appThemeSelect) appThemeSelect.value = appTheme;
@@ -185,12 +251,17 @@
     if (vinylCustomColor) vinylCustomColor.value = vinylCustomColorVal;
     if (textureSelect) textureSelect.value = textureStyle;
     if (accentColor) accentColor.value = accentColorVal;
+    if (ipodColorSelect) ipodColorSelect.value = ipodColor;
+    if (ipodCustomColor) ipodCustomColor.value = ipodCustomColorVal;
+    if (ipodScreenBgSelect) ipodScreenBgSelect.value = ipodScreenBg;
+    if (ipodScreenCustomColor) ipodScreenCustomColor.value = ipodScreenCustomColorVal;
 
     applyDisplayMode(displayMode);
     applyAppTheme(appTheme);
     applyTableFinish();
     applyVinylColor();
     applyAccentColor();
+    applyIpodColors();
     refreshLabelArtworkVisibility();
   }
 
@@ -347,6 +418,9 @@
         dominantArtworkColor = '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
         if (vinylColorSelect && vinylColorSelect.value === 'auto') {
           applyVinylColor();
+        }
+        if (ipodScreenBgSelect && ipodScreenBgSelect.value === 'auto') {
+          applyIpodScreenBg();
         }
       }
     } catch (e) {
