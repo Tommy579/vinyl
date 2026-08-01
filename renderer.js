@@ -477,11 +477,15 @@
     drawerArrow.textContent = collapsed ? '▸' : '▾';
   });
 
-  // -------------------------------------------------- Animation Changement Vinyle
+  // -------------------------------------------------- Animation Changement Vinyle & Cassette
+  const cassetteWindow = document.getElementById('cassette-window');
+
   function triggerVinylSwapAnimation() {
     vinyl.classList.remove('swapping');
+    if (cassetteWindow) cassetteWindow.classList.remove('swapping');
     void vinyl.offsetWidth; // Force le reflow GPU pour relancer l'animation CSS à 60fps
     vinyl.classList.add('swapping');
+    if (cassetteWindow) cassetteWindow.classList.add('swapping');
   }
 
   vinyl.addEventListener('animationend', (e) => {
@@ -489,6 +493,14 @@
       vinyl.classList.remove('swapping');
     }
   });
+
+  if (cassetteWindow) {
+    cassetteWindow.addEventListener('animationend', (e) => {
+      if (e.animationName === 'cassetteDoorAnimation' || e.animationName === 'cassetteSwapAnimation') {
+        cassetteWindow.classList.remove('swapping');
+      }
+    });
+  }
 
   // -------------------------------------------------- Bras interactif
   const REST_ANGLE = 0;           // bras au repos (vertical = 0°)
