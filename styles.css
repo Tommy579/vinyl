@@ -821,15 +821,16 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
 }
 .sticker-handwriting-title {
   flex: 1;
-  font-family: var(--font-handwriting);
-  font-size: 24px;
+  font-family: 'Caveat', cursive;
+  font-size: 26px;
   font-weight: 700;
-  color: #1a233a;
+  color: #1b264f;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  letter-spacing: 0.5px;
-  text-shadow: 0 0 1px rgba(26, 35, 58, 0.3);
+  letter-spacing: 0.8px;
+  transform: rotate(-1.2deg);
+  display: inline-block;
 }
 .sticker-c90-badge {
   font-family: var(--font-mono);
@@ -901,14 +902,16 @@ input[type="range"].modern-slider::-webkit-slider-thumb {
 }
 .sticker-handwriting-artist {
   flex: 1;
-  font-family: var(--font-handwriting);
-  font-size: 21px;
+  font-family: 'Caveat', cursive;
+  font-size: 23px;
   font-weight: 700;
-  color: #8b1e10;
+  color: #9e2a1b;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
+  transform: rotate(-0.8deg);
+  display: inline-block;
 }
 .sticker-tech-tag {
   font-family: var(--font-mono);

@@ -39,7 +39,7 @@ class MediaSessionBridge {
     execFile(
       'powershell.exe',
       ['-ExecutionPolicy', 'Bypass', '-File', this.scriptPath],
-      { windowsHide: true, timeout: 3000 },
+      { windowsHide: true, timeout: 3000, encoding: 'utf8' },
       (error, stdout) => {
         if (error || !stdout) {
           return callback(null);
