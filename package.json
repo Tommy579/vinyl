@@ -38,12 +38,14 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
+      "allowToChangeInstallationDirectory": false,
       "createStartMenuShortcut": true,
-      "createDesktopShortcut": "always",
+      "createDesktopShortcut": false,
       "shortcutName": "Vinyle",
       "uninstallDisplayName": "Vinyle",
-      "runAfterFinish": true
+      "runAfterFinish": true,
+      "include": "installer.nsh",
+      "warningsAsErrors": false
     }
   }
 }

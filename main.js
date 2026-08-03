@@ -114,8 +114,7 @@ function startHttpServer() {
       if (autoLaunchOnRequest) {
         if (mainWindow) {
           if (mainWindow.isMinimized()) mainWindow.restore();
-          mainWindow.show();
-          mainWindow.focus();
+          mainWindow.showInactive();
         }
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: true, message: 'Vinyl launched/focused' }));
@@ -192,8 +191,7 @@ function startPolling() {
       if ((startedPlaying || trackChanged) && payload.title) {
         if (mainWindow) {
           if (mainWindow.isMinimized()) mainWindow.restore();
-          mainWindow.show();
-          mainWindow.focus();
+          mainWindow.showInactive();
         }
       }
     }
