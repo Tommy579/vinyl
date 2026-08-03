@@ -1,7 +1,7 @@
 {
   "name": "vinyle-windows",
   "version": "1.0.0",
-  "description": "Platine vinyle virtuelle pour Windows, synchronisée avec l'app Apple Music (Microsoft Store)",
+  "description": "Platine vinyle virtuelle pour Windows, synchronisée avec l'app Apple Music, Spotify, Deezer",
   "main": "main.js",
   "author": "Tom",
   "license": "MIT",
@@ -20,9 +20,30 @@
   "build": {
     "appId": "com.tom.vinyle",
     "productName": "Vinyle",
+    "npmRebuild": false,
+    "directories": {
+      "output": "dist"
+    },
     "win": {
-      "target": "nsis",
+      "sign": null,
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createStartMenuShortcut": true,
+      "createDesktopShortcut": "always",
+      "shortcutName": "Vinyle",
+      "uninstallDisplayName": "Vinyle",
+      "runAfterFinish": true
     }
   }
 }

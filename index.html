@@ -189,142 +189,199 @@
     <!-- Panneau latéral -->
     <section class="panel">
 
-      <div class="connection-pill" id="connection-pill">
-        <span class="dot" id="connection-dot"></span>
-        <span id="connection-text">Recherche d'Apple Music…</span>
+      <div class="panel-tabs">
+        <button class="tab-btn active" id="tab-player">Lecteur</button>
+        <button class="tab-btn" id="tab-settings">Paramètres</button>
       </div>
 
-      <div class="player-card">
-        <div class="now-playing-info">
-          <h1 id="track-title">Aucun morceau</h1>
-          <p id="track-artist">Lance la lecture dans Apple Music</p>
-          <p id="track-album"></p>
-        </div>
-
-        <div class="player-card-divider"></div>
-
-        <div class="transport">
-          <button id="btn-prev" class="ctrl-btn" title="Précédent"><img src="assets/previous.png" alt="Précédent"
-              class="ctrl-icon" /></button>
-          <button id="btn-playpause" class="ctrl-btn ctrl-btn-lg" title="Lecture / Pause"><img id="icon-playpause"
-              src="assets/play.png" alt="Lecture" class="ctrl-icon" /></button>
-          <button id="btn-next" class="ctrl-btn" title="Suivant"><img src="assets/next.png" alt="Suivant"
-              class="ctrl-icon" /></button>
-        </div>
-
-        <div class="progress">
-          <span id="time-current">0:00</span>
-          <div class="custom-slider-wrap">
-            <input type="range" id="seek" class="modern-slider progress-read-only" min="0" max="100" value="0" disabled
-              tabindex="-1" />
+      <!-- Onglet Lecteur -->
+      <div class="tab-content" id="content-player">
+        <div class="panel-header">
+          <div class="connection-pill" id="connection-pill">
+            <span class="dot" id="connection-dot"></span>
+            <span id="connection-text">Recherche d'Apple Music…</span>
           </div>
-          <span id="time-total">0:00</span>
         </div>
-      </div>
 
-      <div class="theme-drawer">
-        <button class="drawer-toggle" id="drawer-toggle">
-          <span class="drawer-title">Personnaliser l'apparence</span>
-          <span id="drawer-arrow" class="drawer-arrow">▾</span>
-        </button>
+        <div class="player-card">
+          <div class="now-playing-info">
+            <h1 id="track-title">Aucun morceau</h1>
+            <p id="track-artist">Lance la lecture dans Apple Music</p>
+            <p id="track-album"></p>
+          </div>
 
-        <div class="drawer-body" id="drawer-body">
-          <div class="fields-grid">
-            <label class="field">
-              <span>Mode d'affichage</span>
-              <select id="display-mode-select">
-                <option value="vinyl" selected>Platine Vinyle</option>
-                <option value="cassette">Lecteur Cassette</option>
-                <option value="ipod">iPod Nano</option>
-              </select>
-            </label>
+          <div class="player-card-divider"></div>
 
-            <label class="field">
-              <span>Thème de l'interface</span>
-              <select id="app-theme-select">
-                <option value="auto">Auto (Système Windows)</option>
-                <option value="dark" selected>Sombre</option>
-                <option value="light">Clair</option>
-              </select>
-            </label>
+          <div class="transport">
+            <button id="btn-prev" class="ctrl-btn" title="Précédent"><img src="assets/previous.png" alt="Précédent"
+                class="ctrl-icon" /></button>
+            <button id="btn-playpause" class="ctrl-btn ctrl-btn-lg" title="Lecture / Pause"><img id="icon-playpause"
+                src="assets/play.png" alt="Lecture" class="ctrl-icon" /></button>
+            <button id="btn-next" class="ctrl-btn" title="Suivant"><img src="assets/next.png" alt="Suivant"
+                class="ctrl-icon" /></button>
+          </div>
 
-            <div id="vinyl-only-options" class="vinyl-only-options">
+          <div class="progress">
+            <span id="time-current">0:00</span>
+            <div class="custom-slider-wrap">
+              <input type="range" id="seek" class="modern-slider progress-read-only" min="0" max="100" value="0" disabled
+                tabindex="-1" />
+            </div>
+            <span id="time-total">0:00</span>
+          </div>
+        </div>
+
+        <div class="theme-drawer">
+          <button class="drawer-toggle" id="drawer-toggle">
+            <span class="drawer-title">Personnaliser l'apparence</span>
+            <span id="drawer-arrow" class="drawer-arrow">▾</span>
+          </button>
+
+          <div class="drawer-body" id="drawer-body">
+            <div class="fields-grid">
               <label class="field">
-                <span>Finition de la table</span>
-                <div class="field-control-group">
-                  <select id="table-wood-select">
-                    <option value="noyer" selected>Bois — Noyer massif</option>
-                    <option value="chene">Bois — Chêne clair</option>
-                    <option value="acajou">Bois — Acajou rouge</option>
-                    <option value="ebene">Bois — Ébène foncé</option>
-                    <option value="erable">Bois — Érable crème</option>
-                    <option value="custom">Couleur personnalisée</option>
-                  </select>
-                  <input type="color" id="table-custom-color" class="color-picker-inline" value="#4a2c1a"
-                    title="Choisir une couleur" hidden />
-                </div>
-              </label>
-
-              <label class="field" id="vinyl-color-field">
-                <span>Couleur du disque vinyle</span>
-                <div class="field-control-group">
-                  <select id="vinyl-color-select">
-                    <option value="black" selected>Noir classique</option>
-                    <option value="white">Blanc pur</option>
-                    <option value="auto">Auto (Couleur de la pochette)</option>
-                    <option value="custom">Couleur personnalisée</option>
-                  </select>
-                  <input type="color" id="vinyl-custom-color" class="color-picker-inline" value="#0b0b0d"
-                    title="Choisir une couleur" hidden />
-                </div>
-              </label>
-
-              <label class="field">
-                <span>Style du macaron central</span>
-                <select id="texture-select">
-                  <option value="artwork" selected>Pochette d'album au centre (macaron)</option>
-                  <option value="uni">Macaron couleur unie</option>
-                  <option value="full-picture">Picture disc (pochette entière)</option>
+                <span>Mode d'affichage</span>
+                <select id="display-mode-select">
+                  <option value="vinyl" selected>Platine Vinyle</option>
+                  <option value="cassette">Lecteur Cassette</option>
+                  <option value="ipod">iPod Nano</option>
                 </select>
               </label>
+
+              <div id="vinyl-only-options" class="vinyl-only-options">
+                <label class="field">
+                  <span>Finition de la table</span>
+                  <div class="field-control-group">
+                    <select id="table-wood-select">
+                      <option value="noyer" selected>Bois — Noyer massif</option>
+                      <option value="chene">Bois — Chêne clair</option>
+                      <option value="acajou">Bois — Acajou rouge</option>
+                      <option value="ebene">Bois — Ébène foncé</option>
+                      <option value="erable">Bois — Érable crème</option>
+                      <option value="custom">Couleur personnalisée</option>
+                    </select>
+                    <input type="color" id="table-custom-color" class="color-picker-inline" value="#4a2c1a"
+                      title="Choisir une couleur" hidden />
+                  </div>
+                </label>
+
+                <label class="field" id="vinyl-color-field">
+                  <span>Couleur du disque vinyle</span>
+                  <div class="field-control-group">
+                    <select id="vinyl-color-select">
+                      <option value="black" selected>Noir classique</option>
+                      <option value="white">Blanc pur</option>
+                      <option value="auto">Auto (Couleur de la pochette)</option>
+                      <option value="custom">Couleur personnalisée</option>
+                    </select>
+                    <input type="color" id="vinyl-custom-color" class="color-picker-inline" value="#0b0b0d"
+                      title="Choisir une couleur" hidden />
+                  </div>
+                </label>
+
+                <label class="field">
+                  <span>Style du macaron central</span>
+                  <select id="texture-select">
+                    <option value="artwork" selected>Pochette d'album au centre (macaron)</option>
+                    <option value="uni">Macaron couleur unie</option>
+                    <option value="full-picture">Picture disc (pochette entière)</option>
+                  </select>
+                </label>
+              </div>
+
+              <div id="ipod-only-options" class="ipod-only-options" hidden>
+                <label class="field">
+                  <span>Couleur de l'iPod</span>
+                  <div class="field-control-group">
+                    <select id="ipod-color-select">
+                      <option value="slate" selected>Gris Sidéral / Slate</option>
+                      <option value="silver">Argent pur</option>
+                      <option value="black">Noir profond</option>
+                      <option value="blue">Bleu Électrique</option>
+                      <option value="green">Vert Pomme</option>
+                      <option value="purple">Violet intense</option>
+                      <option value="red">PRODUCT (RED)</option>
+                      <option value="custom">Couleur personnalisée</option>
+                    </select>
+                    <input type="color" id="ipod-custom-color" class="color-picker-inline" value="#363a40"
+                      title="Choisir une couleur" hidden />
+                  </div>
+                </label>
+
+                <label class="field">
+                  <span>Couleur de l'écran iPod</span>
+                  <div class="field-control-group">
+                    <select id="ipod-screen-bg-select">
+                      <option value="black" selected>Noir classique</option>
+                      <option value="darkgray">Gris sombre</option>
+                      <option value="navy">Bleu Nuit</option>
+                      <option value="auto">Auto (Couleur de la pochette)</option>
+                      <option value="custom">Couleur personnalisée</option>
+                    </select>
+                    <input type="color" id="ipod-screen-custom-color" class="color-picker-inline" value="#000000"
+                      title="Choisir une couleur" hidden />
+                  </div>
+                </label>
+              </div>
             </div>
 
-            <div id="ipod-only-options" class="ipod-only-options" hidden>
-              <label class="field">
-                <span>Couleur de l'iPod</span>
-                <div class="field-control-group">
-                  <select id="ipod-color-select">
-                    <option value="slate" selected>Gris Sidéral / Slate</option>
-                    <option value="silver">Argent pur</option>
-                    <option value="black">Noir profond</option>
-                    <option value="blue">Bleu Électrique</option>
-                    <option value="green">Vert Pomme</option>
-                    <option value="purple">Violet intense</option>
-                    <option value="red">PRODUCT (RED)</option>
-                    <option value="custom">Couleur personnalisée</option>
-                  </select>
-                  <input type="color" id="ipod-custom-color" class="color-picker-inline" value="#363a40"
-                    title="Choisir une couleur" hidden />
-                </div>
-              </label>
-
-              <label class="field">
-                <span>Couleur de l'écran iPod</span>
-                <div class="field-control-group">
-                  <select id="ipod-screen-bg-select">
-                    <option value="black" selected>Noir classique</option>
-                    <option value="darkgray">Gris sombre</option>
-                    <option value="navy">Bleu Nuit</option>
-                    <option value="auto">Auto (Couleur de la pochette)</option>
-                    <option value="custom">Couleur personnalisée</option>
-                  </select>
-                  <input type="color" id="ipod-screen-custom-color" class="color-picker-inline" value="#000000"
-                    title="Choisir une couleur" hidden />
-                </div>
-              </label>
-            </div>
           </div>
+        </div>
+      </div>
 
+      <!-- Onglet Paramètres -->
+      <div class="tab-content" id="content-settings" hidden>
+        <div class="settings-group">
+          <h2>Application</h2>
+          
+          <label class="setting-item">
+            <div class="setting-info">
+              <span class="setting-title">Thème de l'interface</span>
+              <span class="setting-desc">Personnaliser les couleurs de la fenêtre</span>
+            </div>
+            <select id="app-theme-select" class="settings-select">
+              <option value="auto">Auto (Système Windows)</option>
+              <option value="dark" selected>Sombre</option>
+              <option value="light">Clair</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="settings-group">
+          <h2>Lancement & Fermeture</h2>
+
+          <label class="setting-item">
+            <div class="setting-info">
+              <span class="setting-title">Lancement automatique</span>
+              <span class="setting-desc">Afficher Vinyl dès qu'une musique est détectée</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setting-auto-launch" />
+              <span class="slider"></span>
+            </label>
+          </label>
+
+          <label class="setting-item">
+            <div class="setting-info">
+              <span class="setting-title">Démarrer avec Windows</span>
+              <span class="setting-desc">Lancer l'application en arrière-plan à la connexion</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setting-windows-startup" />
+              <span class="slider"></span>
+            </label>
+          </label>
+
+          <label class="setting-item">
+            <div class="setting-info">
+              <span class="setting-title">Fermer dans la barre des tâches</span>
+              <span class="setting-desc">Réduire au tray plutôt que de quitter complètement</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setting-minimize-on-close" />
+              <span class="slider"></span>
+            </label>
+          </label>
         </div>
       </div>
 

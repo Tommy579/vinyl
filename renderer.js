@@ -755,6 +755,67 @@
     }, 1000);
   }
 
+  // -------------------------------------------------- Gestion des Onglets
+  const tabPlayer = document.getElementById('tab-player');
+  const tabSettings = document.getElementById('tab-settings');
+  const contentPlayer = document.getElementById('content-player');
+  const contentSettings = document.getElementById('content-settings');
+
+  if (tabPlayer && tabSettings && contentPlayer && contentSettings) {
+    tabPlayer.addEventListener('click', () => {
+      tabPlayer.classList.add('active');
+      tabSettings.classList.remove('active');
+      contentPlayer.hidden = false;
+      contentSettings.hidden = true;
+    });
+
+    tabSettings.addEventListener('click', () => {
+      tabSettings.classList.add('active');
+      tabPlayer.classList.remove('active');
+      contentPlayer.hidden = true;
+      contentSettings.hidden = false;
+    });
+  }
+
+  // ------------------------------------------------- Gestion des Paramètres
+  const settingAutoLaunch = document.getElementById('setting-auto-launch');
+  const settingWindowsStartup = document.getElementById('setting-windows-startup');
+  const settingMinimizeOnClose = document.getElementById('setting-minimize-on-close');
+
+  if (settingAutoLaunch) {
+    window.vinyle.getAutoLaunchOnRequest().then((enabled) => {
+      settingAutoLaunch.checked = !!enabled;
+    }).catch((err) => console.error(err));
+
+    settingAutoLaunch.addEventListener('change', () => {
+      window.vinyle.setAutoLaunchOnRequest(settingAutoLaunch.checked);
+    });
+
+    window.vinyle.onSyncAutoLaunchToggle((enabled) => {
+      settingAutoLaunch.checked = !!enabled;
+    });
+  }
+
+  if (settingWindowsStartup) {
+    window.vinyle.getAutoLaunch().then((enabled) => {
+      settingWindowsStartup.checked = !!enabled;
+    }).catch((err) => console.error(err));
+
+    settingWindowsStartup.addEventListener('change', () => {
+      window.vinyle.setAutoLaunch(settingWindowsStartup.checked);
+    });
+  }
+
+  if (settingMinimizeOnClose) {
+    window.vinyle.getMinimizeOnClose().then((enabled) => {
+      settingMinimizeOnClose.checked = !!enabled;
+    }).catch((err) => console.error(err));
+
+    settingMinimizeOnClose.addEventListener('change', () => {
+      window.vinyle.setMinimizeOnClose(settingMinimizeOnClose.checked);
+    });
+  }
+
   // état initial
   loadThemeSettings();
   renderConnection();
