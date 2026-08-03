@@ -1,5 +1,5 @@
 !macro preInit
-  StrCpy $INSTDIR "$PROFILE\programs\vinyl"
+  StrCpy $INSTDIR "C:\Programs\Vinyl"
 !macroend
 
 !define MUI_FINISHPAGE_SHOWREADME ""
